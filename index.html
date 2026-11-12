@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>أثَر</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="أثَر">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png?v=1">
+<link rel="apple-touch-icon" href="icon-180.png?v=1">
+<meta name="theme-color" content="#F6F0E4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F0E4; --paper2:#EFE6D4; --card:#FFFBF3; --line:#E2D6BF;
+  --ink:#1F2733; --ink2:#5B6472; --ink3:#8C8576;
+  --blue:#2E4A78; --blue-soft:#E3E9F3; --sepia:#8A5A2B; --sepia-soft:#F1E3CF; --sepia-ink:#4A3A28;
+  --spark:#2E4A78; --on-spark:#F6F0E4; --ok:#3C7A4E; --red:#A3402F;
+  --r-diary:#E3E9F3; --r-khawater:#F1E3CF; --r-tajalli:#EDE3F3; --r-novels:#E2EFE6; --r-letters:#F6E2DF; --r-ideas:#FBF0D2;
+  --ui:'IBM Plex Sans Arabic',system-ui,sans-serif; --pen:'Amiri',serif; --pen-size:21px;
+}
+:root[data-theme="dark"]{
+  --paper:#16191F; --paper2:#1E222A; --card:#222731; --line:#343B49;
+  --ink:#ECE6D8; --ink2:#B9B3A6; --ink3:#8C8679;
+  --blue:#9DB8E8; --blue-soft:#26324A; --sepia:#D49A5E; --sepia-soft:#3A2D20; --sepia-ink:#EAD6BC;
+  --spark:#24385C; --on-spark:#F1EADB; --ok:#7CC293; --red:#E07C69;
+  --r-diary:#26324A; --r-khawater:#3A2D20; --r-tajalli:#352B40; --r-novels:#22362A; --r-letters:#40282A; --r-ideas:#3D3520;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--ui);-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+
+/* shell */
+.shell{display:flex;min-height:100dvh}
+.side{display:none}
+.main{flex:1;min-width:0}
+.wrap{max-width:760px;margin:0 auto;padding:14px 18px 120px}
+@media (min-width:900px){
+  .side{display:flex;flex-direction:column;gap:2px;width:236px;flex:none;position:sticky;top:0;height:100dvh;overflow:auto;
+    background:var(--paper2);border-inline-start:1px solid var(--line);padding:18px 12px}
+  .side .logo{font-family:var(--pen);font-size:30px;color:var(--blue);margin:0 8px 12px;font-weight:700}
+  .side a{display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--ink2);padding:8px 10px;border-radius:10px;text-decoration:none;cursor:pointer}
+  .side a:hover{background:var(--card)}
+  .side a.on{background:var(--card);color:var(--ink);font-weight:600}
+  .side a span{color:var(--ink3);font-size:12px}
+  .side .cap-btn{margin-top:12px;background:var(--sepia);color:#fff;border-radius:12px;padding:10px;font-weight:600}
+  .fab{display:none!important}
+  .phone-only{display:none!important}
+  .shell.focus .side{display:none}
+}
+@media (max-width:899px){ .desk-only{display:none!important} }
+
+/* common */
+.top{display:flex;align-items:center;gap:8px;padding:6px 0 10px}
+.top .t{font-weight:600;font-size:17px;flex:1}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--ink2);font-size:19px;flex:none}
+.icon-btn:active{background:var(--paper2)}
+.pill{background:var(--blue-soft);color:var(--blue);border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px}
+.h{font-size:13px;color:var(--ink3);margin:22px 2px 8px;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.muted{color:var(--ink3);font-size:13px}
+.empty{text-align:center;color:var(--ink3);padding:40px 16px;line-height:1.9}
+.empty .big{font-size:40px}
+.fab{position:fixed;left:18px;bottom:calc(20px + env(safe-area-inset-bottom));background:var(--sepia);color:#fff;border-radius:999px;padding:13px 20px;
+  font-weight:600;font-size:16px;box-shadow:0 8px 22px rgba(138,90,43,.35);z-index:20}
+.banner{background:var(--sepia-soft);color:var(--sepia-ink);border-radius:12px;padding:8px 12px;font-size:13px;margin-bottom:10px}
+
+/* home */
+.hello{font-family:var(--pen);font-size:28px;margin:6px 0 0;font-weight:700}
+.spark{margin-top:14px;background:var(--spark);color:var(--on-spark);border-radius:18px;padding:14px 16px}
+.spark .k{font-size:12px;opacity:.8}
+.spark .q{font-family:var(--pen);font-size:21px;line-height:1.6;margin:4px 0 10px}
+.spark button{background:var(--on-spark);color:var(--spark);border-radius:999px;padding:7px 16px;font-weight:600;font-size:14px}
+:root[data-theme="dark"] .spark button{color:#1F2733}
+.week{display:flex;gap:10px;margin-top:12px}
+.week>div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.week b{font-size:21px;display:block}
+.week span{font-size:12px;color:var(--ink3)}
+.rooms{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (min-width:600px){.rooms{grid-template-columns:1fr 1fr 1fr}}
+.room{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:6px;min-height:96px;text-align:start}
+.room .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:19px}
+.room b{font-size:16px}
+.room span{font-size:12px;color:var(--ink3)}
+.memory{margin-top:12px;background:var(--sepia-soft);border-radius:16px;padding:12px 14px;display:block;width:100%;text-align:start}
+.memory .k{font-size:12px;color:var(--sepia);font-weight:600}
+.memory p{font-family:var(--pen);font-size:18px;line-height:1.7;margin:4px 0 0;color:var(--sepia-ink)}
+
+/* lists */
+.item{display:block;width:100%;text-align:start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px}
+.item .tt{font-weight:600;font-size:16px}
+.item .ex{font-family:var(--pen);font-size:17px;line-height:1.7;color:var(--ink2);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.item .d{font-size:12px;color:var(--ink3);margin-top:6px}
+.item .to{font-size:12px;color:var(--ink3)}
+.item .to b{color:var(--ink);font-size:15px}
+.item.locked{background:repeating-linear-gradient(-45deg,var(--paper2),var(--paper2) 8px,var(--card) 8px,var(--card) 16px);text-align:center}
+.item.locked .lk{font-size:28px}
+.item.opened{border-color:var(--sepia);box-shadow:0 0 0 2px var(--sepia-soft)}
+.newbtn{width:100%;border:1.5px dashed var(--blue);color:var(--blue);border-radius:14px;padding:13px;font-weight:600;font-size:15px;margin-bottom:12px}
+.idea-act{display:flex;gap:6px;margin-top:8px}
+.idea-act span{font-size:12px;color:var(--blue);background:var(--blue-soft);border-radius:999px;padding:3px 10px}
+
+/* novel */
+.cover{background:linear-gradient(160deg,#2E4A78,#1F2733);color:#F6F0E4;border-radius:18px;padding:16px;display:block;width:100%;text-align:start;margin-bottom:10px}
+.cover .k{font-size:12px;opacity:.75}
+.cover h2{font-family:var(--pen);font-size:28px;line-height:1.3;margin:2px 0}
+.bar{height:8px;background:rgba(255,255,255,.2);border-radius:9px;margin:10px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;background:#E9C98F}
+.cover small{font-size:12px;opacity:.85}
+.seg{display:flex;background:var(--paper2);border-radius:12px;padding:3px;margin:14px 0 10px}
+.seg button{flex:1;text-align:center;font-size:14px;padding:7px 0;border-radius:9px;color:var(--ink2)}
+.seg button.on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.chap{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.chap .num{width:32px;height:32px;border-radius:9px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.chap .open{flex:1;text-align:start;min-width:0}
+.chap b{font-size:15px;display:block}
+.chap span{font-size:12px;color:var(--ink3)}
+.chap .mv{display:flex;flex-direction:column}
+.chap .mv button{width:30px;height:22px;color:var(--ink3);font-size:12px}
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.person{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 6px;text-align:center}
+.person .av{width:44px;height:44px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;font-family:var(--pen);font-size:22px;color:#fff}
+.person b{font-size:14px;display:block}
+.person span{font-size:12px;color:var(--ink3)}
+textarea.notes{width:100%;min-height:50vh;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:12px 14px;font-family:var(--pen);font-size:19px;line-height:1.9;resize:vertical;outline:none}
+
+/* editor */
+.ed{display:flex;flex-direction:column;background:var(--paper)}
+@media (max-width:899px){
+  .ed{position:fixed;left:0;right:0;top:0;height:var(--vvh,100dvh);transform:translateY(var(--vvt,0px));z-index:30;padding-top:env(safe-area-inset-top)}
+  .ed-body{order:2} .hk-bar{order:3}
+}
+@media (min-width:900px){ .ed{height:100dvh} }
+.ed-top{display:flex;align-items:center;gap:6px;padding:8px 12px;flex:none}
+.ed-top .room-chip{font-weight:600;font-size:15px;flex:1}
+.saved{font-size:12px;color:var(--ok);white-space:nowrap}
+.ed-body{flex:1;overflow:auto;padding:0 20px 30px}
+.ed-page{max-width:680px;margin:0 auto}
+.ed-title{font-family:var(--pen);font-size:26px;font-weight:700;border:0;background:transparent;width:100%;outline:none;padding:4px 0}
+.ed-meta{font-size:12px;color:var(--ink3);margin-bottom:6px}
+.ed-to{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line);margin-bottom:8px;padding-bottom:4px}
+.ed-to span{color:var(--ink3);font-size:14px}
+.ed-to input{flex:1;border:0;background:transparent;outline:none;font-size:16px;font-weight:600;padding:4px 0}
+.ed-spark{font-family:var(--pen);font-size:17px;color:var(--sepia);border-inline-start:3px solid var(--sepia);padding:2px 10px;margin:4px 0 10px}
+.ed-text{font-family:var(--pen);font-size:var(--pen-size);line-height:2;border:0;background:transparent;width:100%;resize:none;outline:none;min-height:55vh;overflow:hidden;display:block;padding:0}
+.ed-text::placeholder,.ed-title::placeholder{color:var(--ink3);opacity:.7}
+.remote{background:var(--blue-soft);color:var(--blue);font-size:13px;padding:8px 12px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.remote button{font-weight:700;color:var(--blue)}
+
+/* harakat bar */
+.hk-bar{flex:none;background:var(--card);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.hk-head{display:flex;justify-content:space-between;align-items:center;margin:0 2px 6px}
+.hk-head span{font-size:12px;color:var(--ink3)}
+.toggle{background:var(--blue-soft);color:var(--blue);border-radius:999px;padding:5px 12px;font-weight:600;font-size:12px}
+.hk-row{display:flex;gap:4px}
+.hk{flex:1;min-width:0;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:3px 0 2px;display:flex;flex-direction:column;align-items:center}
+.hk:active{background:var(--blue-soft)}
+.hk .g{font-family:var(--pen);font-size:25px;line-height:1.3}
+.hk .n{font-size:9px;color:var(--ink3);white-space:nowrap}
+.pk-row{display:flex;gap:4px;margin-top:5px}
+.pk-row button{flex:1;border:1px dashed var(--line);border-radius:8px;font-family:var(--pen);font-size:18px;padding:1px 0;color:var(--ink2)}
+.hk-bar.closed .hk-row,.hk-bar.closed .pk-row{display:none}
+.hk-bar.closed .hk-head{margin-bottom:0}
+@media (min-width:900px){
+  .ed-top{order:1;max-width:760px;width:100%;margin:0 auto;padding:12px 20px}
+  .hk-bar{order:2;border:0;background:transparent;max-width:720px;width:100%;margin:0 auto;padding:0 20px 8px}
+  .ed-body{order:3}
+  .hk{flex:none;width:62px}
+  .hk-row,.pk-row{flex-wrap:wrap;justify-content:flex-start}
+  .pk-row button{flex:none;width:40px}
+}
+
+/* sheet + toast */
+#sheet{position:fixed;inset:0;z-index:50;display:none}
+#sheet.on{display:block}
+#sheet .dim{position:absolute;inset:0;background:rgba(20,24,32,.45)}
+#sheet .box{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:24px 24px 0 0;padding:14px 18px calc(18px + env(safe-area-inset-bottom));max-height:88dvh;overflow:auto}
+@media (min-width:700px){#sheet .box{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:520px;border-radius:22px}}
+.grab{width:42px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 12px}
+.box h3{margin:0;font-size:17px}
+.box .s{font-size:13px;color:var(--ink3);margin:2px 0 10px;line-height:1.7}
+.box textarea,.box input[type=text],.box input[type=number],.box input[type=date]{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:10px 12px;outline:none;font-size:16px;margin-bottom:8px}
+.box textarea{height:120px;font-family:var(--pen);font-size:19px;line-height:1.8;resize:none}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+.chip{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--ink2);background:var(--paper)}
+.chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+:root[data-theme="dark"] .chip.on{color:#16191F}
+.srow{display:flex;gap:8px;align-items:center}
+.mic{width:48px;height:48px;border-radius:50%;background:var(--sepia-soft);color:var(--sepia);font-size:20px;flex:none}
+.mic.on{background:var(--red);color:#fff}
+.go{flex:1;height:48px;border-radius:14px;background:var(--sepia);color:#fff;font-weight:600;font-size:16px}
+.go.blue{background:var(--blue);color:#fff}
+:root[data-theme="dark"] .go.blue{color:#16191F}
+.list-btn{display:flex;align-items:center;gap:10px;width:100%;text-align:start;padding:12px 6px;border-bottom:1px solid var(--line);font-size:15px}
+.list-btn:last-child{border-bottom:0}
+.list-btn.danger{color:var(--red)}
+#toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:12px;
+  font-size:14px;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;text-align:center}
+#toast.on{opacity:1}
+
+/* settings / search */
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row label{font-size:15px}
+.opts{display:flex;gap:4px;background:var(--paper2);border-radius:10px;padding:3px}
+.opts button{padding:5px 10px;border-radius:8px;font-size:13px;color:var(--ink2)}
+.opts button.on{background:var(--card);color:var(--ink);font-weight:600}
+.field{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:11px 14px;outline:none;font-size:16px}
+.small-btn{font-size:13px;padding:5px 10px;border-radius:8px;background:var(--paper2)}
+.small-btn.danger{color:var(--red)}
+
+#auth{position:fixed;inset:0;z-index:70;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.auth-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px 20px 18px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px;text-align:center}
+.auth-logo{width:72px;height:72px;border-radius:18px;margin:0 auto}
+.auth-card h2{margin:4px 0 0;font-family:var(--pen);font-size:30px;color:var(--blue)}
+.auth-sub{margin:0 0 8px;color:var(--ink3);font-size:14px}
+.auth-card input{font-size:16px;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:11px 12px;outline:none}
+.auth-msg{margin:0;min-height:1.2em;font-size:13px;color:var(--red)}
+.auth-msg.ok{color:var(--ok)}
+.auth-btn{background:var(--blue);color:#fff;border-radius:12px;padding:13px;font-weight:700;font-size:16px}
+.auth-btn[disabled]{opacity:.6}
+.auth-link{color:var(--blue);font-weight:600;font-size:14px;padding:6px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="sheet"></div>
+<div id="toast"></div>
+<div id="auth" dir="rtl" lang="ar" hidden></div>
+<script type="module">import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, onSnapshot, collection, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { firebaseConfig } from './config.js';
+
+const VERSION = "1";
+/* ---------- logic ---------- */
+// The six rooms of the app. A novel is a "novel" item in the novels room; its chapters are "chapter" items.
+const ROOMS = [
+  { id: 'diary', name: 'يوميات', icon: '📔', unit: 'صفحة' },
+  { id: 'khawater', name: 'خواطر', icon: '🍃', unit: 'خاطرة' },
+  { id: 'tajalli', name: 'تجليات', icon: '✨', unit: 'نص' },
+  { id: 'novels', name: 'روايات', icon: '📖', unit: 'رواية' },
+  { id: 'letters', name: 'رسائل', icon: '✉️', unit: 'رسالة' },
+  { id: 'ideas', name: 'أفكار', icon: '💡', unit: 'بذرة' },
+];
+const roomOf = id => ROOMS.find(r => r.id === id) || ROOMS[1];
+
+// Harakat in the order of the bar. SHADDA combines with the others (it is written before them).
+const SHADDA = 'ّ';
+const MARKS = [['َ', 'فتحة'], ['ُ', 'ضمة'], ['ِ', 'كسرة'], ['ْ', 'سكون'], [SHADDA, 'شدة'],
+  ['ً', 'تنوين فتح'], ['ٌ', 'تنوين ضم'], ['ٍ', 'تنوين كسر']];
+const PUNCT = ['،', '؛', '؟', '!', '«', '»', 'ـ'];
+const isHaraka = c => !!c && c !== SHADDA && MARKS.some(m => m[0] === c);
+// What pressing a mark does, given the character just before the cursor:
+// del = how many characters before the cursor to replace, text = what to put there.
+// A second press of the same mark removes it; another mark replaces it; shadda goes before a mark already there.
+function markEdit(prev, mark) {
+  if (mark === SHADDA) {
+    if (prev === SHADDA) return { del: 1, text: '' };
+    if (isHaraka(prev)) return { del: 1, text: SHADDA + prev };
+    return { del: 0, text: SHADDA };
+  }
+  if (prev === mark) return { del: 1, text: '' };
+  if (isHaraka(prev)) return { del: 1, text: mark };
+  return { del: 0, text: mark };
+}
+// Is there a letter (not a space) before the cursor for a mark to sit on? Marks and shadda count as part of it.
+const canMark = before => { const c = before.replace(/[ً-ْ]+$/, '').slice(-1); return !!c && !/\s/.test(c); };
+
+const wordCount = s => ((s || '').trim().match(/\S+/g) || []).length;
+const pad = n => String(n).padStart(2, '0');
+const isoDay = ts => { const d = new Date(ts); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const todayISO = () => isoDay(Date.now());
+const addDays = (iso, n) => { const [y, m, d] = iso.split('-').map(Number); return isoDay(new Date(y, m - 1, d + n, 12).getTime()); };
+const daysBetween = (a, b) => { const [y1, m1, d1] = a.split('-').map(Number), [y2, m2, d2] = b.split('-').map(Number); return Math.round((Date.UTC(y2, m2 - 1, d2) - Date.UTC(y1, m1 - 1, d1)) / 864e5); };
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+
+// Words written in the last 7 days (today included) and on how many of those days he wrote.
+function weekStats(days, today) {
+  let words = 0, n = 0;
+  for (let i = 0; i < 7; i++) { const w = (days || {})[addDays(today, -i)] || 0; if (w > 0) { words += w; n++; } }
+  return { words, days: n };
+}
+
+const SPARKS = [
+  'اكتب عن ريحة بيت ستك، أول ما تفتح الباب.', 'أول مرة حسّيت فيها إنك كبرت.', 'جملة كان نفسك تحكيها وما حكيتها.',
+  'اكتب عن إيدين شخص بتحبه.', 'صوت بتتذكره من طفولتك.', 'مدينة بتشتاقلها، بدون ما تذكر اسمها.',
+  'رسالة لنفسك وانت عمرك عشر سنين.', 'شو كان بجيبك اليوم؟ وشو بحكي عنك؟', 'اكتب عن شبّاك.', 'لحظة سكوت ما بتنتسى.',
+  'أول مطر بتتذكره.', 'حلم رجعلك أكثر من مرة.', 'شخص مرّ بحياتك يوم واحد بس.', 'اكتب عن الانتظار.',
+  'ارفع عينك: شو أول إشي بتشوفه؟ وصفه كأنك أول مرة بتشوفه.', 'فنجان قهوة وحكاية.', 'الطريق لبيت أهلك.',
+  'إشي ضيّعته وما رجع.', 'كلمة بتحبها، وليش؟', 'اكتب عن البحر بدون ما تقول كلمة «بحر».', 'سفر غيّرك.',
+  'الغربة بجملة وحدة، وبعدين بصفحة.', 'أطول ليلة مرّت عليك.', 'ابدأ بـ: «ما كنت متوقع إنه...»',
+  'ابدأ بـ: «لو رجع فيني الزمن...»', 'ابدأ بـ: «بهديك اليوم...»', 'شو تعلّمت من مريض؟', 'اكتب عن ضحكة.',
+  'مكان كنت تتخبّى فيه وانت صغير.', 'أغنية بتفتح باب بقلبك: شو اللي ورا الباب؟', 'اكتب عن الصبر كأنه شخص.',
+  'حوار بين شخصين على محطة.', 'شو بتحكي للغيمة؟', 'لون بتحبه، وذكرى إله.', 'أول كتاب حبّيته.',
+  'اكتب عن البداية من جديد.', 'شو اللي بخلّيك تحس بالأمان؟', 'جملة سمعتها اليوم وعلقت براسك.',
+  'الليل بعد ما الكل ينام.', 'شخص بتتمنى تشكره.',
+];
+const sparkFor = iso => SPARKS[((daysBetween('2026-01-01', iso) % SPARKS.length) + SPARKS.length) % SPARKS.length];
+
+const alive = t => t && !t.deleted;
+// A letter "for the future" stays closed until its day comes.
+const isLocked = (t, today) => !!(t && t.room === 'letters' && t.lockUntil && today < t.lockUntil);
+
+// Something he wrote on this same day in an earlier year (newest year first). Ideas and closed letters are skipped.
+function onThisDay(texts, today) {
+  const md = today.slice(5), y = +today.slice(0, 4);
+  const hits = Object.values(texts).filter(t => alive(t) && t.kind !== 'novel' && t.room !== 'ideas' && !isLocked(t, today)
+    && (t.body || '').trim() && isoDay(t.created).slice(5) === md && +isoDay(t.created).slice(0, 4) < y);
+  hits.sort((a, b) => b.created - a.created);
+  return hits[0] || null;
+}
+
+// Arabic search that ignores harakat and the usual spelling differences (أ إ آ ا، ة ه، ى ي).
+const normAr = s => (s || '').replace(/[ً-ْـ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').toLowerCase();
+function search(texts, q, today) {
+  const n = normAr(q).trim();
+  if (!n) return [];
+  return Object.values(texts).filter(t => alive(t) && !isLocked(t, today) && t.kind !== 'novel'
+    && normAr([t.title, t.body, t.to].join(' ')).includes(n)).sort((a, b) => b.updated - a.updated);
+}
+
+const novelChapters = (texts, nid) => Object.values(texts).filter(t => alive(t) && t.kind === 'chapter' && t.novel === nid)
+  .sort((a, b) => (a.order || 0) - (b.order || 0) || a.created - b.created);
+const novelWords = (texts, nid) => novelChapters(texts, nid).reduce((s, c) => s + (c.words || 0), 0);
+// Items shown in a room's list: texts (newest first; diary by its day), or the novels themselves.
+function roomItems(texts, room) {
+  const all = Object.values(texts).filter(t => alive(t) && t.room === room);
+  if (room === 'novels') return all.filter(t => t.kind === 'novel').sort((a, b) => b.updated - a.updated);
+  const list = all.filter(t => t.kind === 'text');
+  if (room === 'diary') return list.sort((a, b) => (b.day || isoDay(b.created)).localeCompare(a.day || isoDay(a.created)) || b.created - a.created);
+  return list.sort((a, b) => b.updated - a.updated);
+}
+const excerpt = (s, n = 120) => { const x = (s || '').replace(/\s+/g, ' ').trim(); return x.length > n ? x.slice(0, n) + '…' : x; };
+const hasContent = t => !!((t.title || '').trim() || (t.body || '').trim() || (t.to || '').trim());
+
+/* ---------- storage (Firebase) ---------- */
+
+
+
+
+
+// Same Firebase project and sign-in as Jaybti and Nafas. Athar keeps:
+//   users/<uid>/apps/athar              settings + words written per day (small)
+//   users/<uid>/apps/athar/texts/<id>   one document per text, novel or chapter (so a long novel never fills one document)
+// Every write goes to this device's own copy at once (works with no internet) and reaches the server when online.
+// Only the text that was edited is written, so an old copy on another device never writes over newer texts.
+const fbApp = initializeApp(firebaseConfig);
+const auth = getAuth(fbApp);
+const fsdb = initializeFirestore(fbApp, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) });
+const DB = { texts: {}, meta: {} };
+const refs = { uid: null, email: '', ready: false, synced: false };
+const plain = o => JSON.parse(JSON.stringify(o));
+const deepMerge = (a, b) => { for (const k in b) { if (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])) { a[k] = a[k] && typeof a[k] === 'object' ? a[k] : {}; deepMerge(a[k], b[k]); } else a[k] = b[k]; } return a; };
+const metaDoc = () => doc(fsdb, 'users', refs.uid, 'apps', 'athar');
+const textDoc = id => doc(fsdb, 'users', refs.uid, 'apps', 'athar', 'texts', id);
+const sync = { pending: 0, at: null, failed: false };
+function sent(p) {
+  sync.pending++;
+  p.then(() => { sync.at = Date.now(); sync.failed = false; }, () => { sync.failed = true; toast('ما انحفظ على السيرفر. جرب كمان مرة'); })
+    .finally(() => { sync.pending--; });
+}
+const store = {
+  putText(t) { if (!refs.uid) return; DB.texts[t.id] = t; sent(setDoc(textDoc(t.id), plain(t))); },
+  dropText(id) { if (!refs.uid) return; delete DB.texts[id]; sent(deleteDoc(textDoc(id))); },
+  putMeta(patch) { if (!refs.uid) return; deepMerge(DB.meta, patch); sent(setDoc(metaDoc(), plain(patch), { merge: true })); },
+  // Added on the server (not replaced), so two devices writing on the same day both count.
+  bump(day, n) {
+    if (!refs.uid || !n) return;
+    DB.meta.days = DB.meta.days || {}; DB.meta.days[day] = (DB.meta.days[day] || 0) + n;
+    sent(setDoc(metaDoc(), { days: { [day]: increment(n) } }, { merge: true }));
+  },
+};
+window.syncText = () => !navigator.onLine ? 'ما في نت هلأ: كل إشي محفوظ على هالجهاز، وبيتزامن لما يرجع النت.'
+  : sync.failed ? 'آخر حفظ ما وصل السيرفر.' : sync.pending ? 'عم يتزامن...' : 'كل إشي متزامن ✓';
+
+/* ---------- sign-in screen ---------- */
+const AUTH_ERR = {
+  'auth/invalid-credential': 'الإيميل أو كلمة السر غلط',
+  'auth/wrong-password': 'كلمة السر غلط',
+  'auth/user-not-found': 'ما في حساب بهالإيميل',
+  'auth/invalid-email': 'الإيميل مش مكتوب صح',
+  'auth/missing-password': 'اكتب كلمة السر',
+  'auth/network-request-failed': 'ما في نت. اتصل وجرب كمان مرة',
+  'auth/too-many-requests': 'محاولات كثير، استنى شوي وجرب',
+};
+function drawAuth(msg = '', ok = false) {
+  $('auth').innerHTML = `<div class="auth-card">
+    <img src="icon-192.png?v=1" alt="" width="72" height="72" class="auth-logo">
+    <h2>أثَر</h2><p class="auth-sub">ادخل بنفس حساب جيبتي ونفس</p>
+    <input id="aE" type="email" autocomplete="email" inputmode="email" placeholder="الإيميل" dir="ltr">
+    <input id="aP" type="password" autocomplete="current-password" placeholder="كلمة السر" dir="ltr">
+    <p class="auth-msg ${ok ? 'ok' : ''}" id="aErr">${esc(msg)}</p>
+    <button class="auth-btn" id="aGo">دخول</button>
+    <button class="auth-link" id="aReset">نسيت كلمة السر؟</button>
+  </div>`;
+}
+function showAuth(on) { $('auth').hidden = !on; if (on) drawAuth(); }
+async function authGo() {
+  const btn = $('aGo'); btn.disabled = true;
+  try { await signInWithEmailAndPassword(auth, $('aE').value.trim(), $('aP').value); }
+  catch (e) { $('aErr').textContent = AUTH_ERR[e.code] || 'ما زبط. جرب كمان مرة'; $('aErr').classList.remove('ok'); }
+  finally { btn.disabled = false; }
+}
+$('auth').addEventListener('click', async e => {
+  const id = e.target.closest('button')?.id;
+  if (id === 'aGo') authGo();
+  if (id === 'aReset') {
+    const email = $('aE').value.trim();
+    if (!email) { $('aErr').textContent = 'اكتب إيميلك فوق أول'; return; }
+    try { await sendPasswordResetEmail(auth, email); drawAuth('بعتنالك إيميل لتغيير كلمة السر', true); }
+    catch (err) { $('aErr').textContent = AUTH_ERR[err.code] || 'ما زبط. جرب كمان مرة'; }
+  }
+});
+$('auth').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.target.id === 'aE' || e.target.id === 'aP')) authGo(); });
+
+window.extraSettings = () => `<div class="h">الحساب</div><div class="card"><div class="row"><span class="muted" dir="ltr">${esc(refs.email)}</span>
+  <button class="small-btn danger" data-act="signout">تسجيل الخروج</button></div></div>`;
+
+let unsubs = [];
+function load() {
+  boot();
+  A.signout = async b => {
+    if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'اكبس كمان مرة'; return; }
+    flushEditor(); await signOut(auth);
+  };
+  if ('serviceWorker' in navigator) {
+    // A new release installs in the background; reload once so it shows straight away (never while writing).
+    const had = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', () => { if (had && UI.view.name !== 'edit') location.reload(); });
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+  onAuthStateChanged(auth, user => {
+    unsubs.forEach(u => u()); unsubs = [];
+    DB.texts = {}; DB.meta = {};
+    if (!user) { refs.uid = null; refs.email = ''; refs.synced = false; UI.ed = null; UI.view = { name: 'home' }; render(); showAuth(true); return; }
+    refs.uid = user.uid; refs.email = user.email || ''; refs.synced = false;
+    showAuth(false); render();
+    unsubs.push(onSnapshot(collection(fsdb, 'users', user.uid, 'apps', 'athar', 'texts'), { includeMetadataChanges: true }, s => {
+      if (!s.metadata.fromCache) refs.synced = true;
+      const changes = s.docChanges().map(ch => ({ id: ch.doc.id, data: ch.type === 'removed' ? null : ch.doc.data(), mine: ch.doc.metadata.hasPendingWrites }));
+      if (changes.length) applyRemote(changes);
+      else if (UI.view.name !== 'edit') softRender();
+    }, () => toast('ما قدرت أوصل لكتاباتك')));
+    unsubs.push(onSnapshot(metaDoc(), s => {
+      DB.meta = s.exists() ? s.data() : {};
+      if (UI.view.name !== 'edit') softRender(); else applyTheme();
+    }));
+  });
+}
+/* ---------- actions ---------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtN = n => Number(n || 0).toLocaleString('ar-SY');
+const fmtDay = (iso, withYear) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  const o = { day: 'numeric', month: 'long' };
+  if (withYear || y !== new Date().getFullYear()) o.year = 'numeric';
+  return new Intl.DateTimeFormat('ar-SY', o).format(new Date(y, m - 1, d, 12));
+};
+const fmtLong = iso => { const [y, m, d] = iso.split('-').map(Number); return new Intl.DateTimeFormat('ar-SY', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(y, m - 1, d, 12)); };
+const DEV = (() => { try { let d = localStorage.getItem('athar-dev'); if (!d) { d = newId(); localStorage.setItem('athar-dev', d); } return d; } catch (e) { return 'x'; } })();
+const pref = (k, v) => { try { if (v === undefined) return localStorage.getItem('athar-' + k); localStorage.setItem('athar-' + k, v); } catch (e) { return null; } };
+const settings = () => DB.meta.settings || {};
+
+const UI = { view: { name: 'home' }, ed: null, seg: 'chapters', q: '', pendingRender: false, focus: false };
+const A = {};
+
+let toastT = 0;
+function toast(msg) { const t = $('toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2600); }
+
+function applyTheme() {
+  const th = settings().theme || 'auto';
+  const dark = th === 'dark' || (th === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  const size = { s: '18px', m: '21px', l: '24px' }[settings().size || 'm'];
+  document.documentElement.style.setProperty('--pen-size', size);
+  const meta = document.querySelector('meta[name=theme-color]'); if (meta) meta.content = dark ? '#16191F' : '#F6F0E4';
+}
+
+/* ----- navigation (the phone's back button goes back inside the app) ----- */
+function go(view, replace) {
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  flushEditor();
+  if (UI.view.name === 'edit' && view.name !== 'edit') leaveEditor();
+  UI.view = view;
+  try { history[replace ? 'replaceState' : 'pushState']({ v: view }, ''); } catch (e) {}
+  render(); window.scrollTo(0, 0);
+}
+A.back = () => { if (history.state && history.length > 1 && !UI.firstPage()) history.back(); else go({ name: 'home' }, true); };
+UI.firstPage = () => !history.state || history.state.first;
+window.addEventListener('popstate', e => {
+  if ($('sheet').classList.contains('on')) { closeSheet(); try { history.pushState({ v: UI.view }, ''); } catch (err) {} return; }
+  flushEditor();
+  if (UI.view.name === 'edit') leaveEditor();
+  UI.view = (e.state && e.state.v) || { name: 'home' };
+  render();
+});
+
+/* ----- sheets ----- */
+function openSheet(html) { const s = $('sheet'); s.innerHTML = `<div class="dim" data-act="closeSheet"></div><div class="box"><div class="grab"></div>${html}</div>`; s.classList.add('on'); }
+function closeSheet() { const s = $('sheet'); s.classList.remove('on'); s.innerHTML = ''; stopMic(); }
+A.closeSheet = closeSheet;
+
+/* ----- rendering ----- */
+const counts = () => {
+  const c = {};
+  for (const r of ROOMS) c[r.id] = roomItems(DB.texts, r.id).length;
+  return c;
+};
+function sideHTML() {
+  const c = counts(), v = UI.view;
+  const on = id => (v.name === 'room' && v.room === id) || (v.name === 'novel' && id === 'novels') ? 'on' : '';
+  return `<nav class="side">
+    <div class="logo">أثَر</div>
+    <a data-act="nav" data-to="home" class="${v.name === 'home' ? 'on' : ''}">🏠 الرئيسية</a>
+    ${ROOMS.map(r => `<a data-act="openRoom" data-room="${r.id}" class="${on(r.id)}">${r.icon} ${r.name} <span class="num">${fmtN(c[r.id])}</span></a>`).join('')}
+    <div style="flex:1"></div>
+    <a data-act="nav" data-to="search" class="${v.name === 'search' ? 'on' : ''}">🔍 بحث</a>
+    <a data-act="nav" data-to="settings" class="${v.name === 'settings' ? 'on' : ''}">⚙️ الإعدادات</a>
+    <button class="cap-btn" data-act="capture">⚡ التقاط سريع</button>
+  </nav>`;
+}
+// Used for changes that come from elsewhere (another device): never redraw under his fingers. If he is typing
+// somewhere (novel notes, a name...), the page is redrawn when he leaves the box.
+const typing = () => { const a = document.activeElement; return !!(a && $('app').contains(a) && /^(TEXTAREA|INPUT)$/.test(a.tagName)); };
+function softRender() { if (typing()) UI.pendingRender = true; else render(); }
+function render() {
+  UI.pendingRender = false;
+  applyTheme();
+  const v = UI.view;
+  let main = '';
+  if (v.name === 'edit') { renderEditor(); return; }
+  if (v.name === 'room') main = roomHTML(v.room);
+  else if (v.name === 'novel') main = novelHTML(v.id);
+  else if (v.name === 'search') main = searchHTML();
+  else if (v.name === 'settings') main = settingsHTML();
+  else main = homeHTML();
+  $('app').innerHTML = `<div class="shell">${sideHTML()}<main class="main"><div class="wrap">${main}</div></main></div>
+    ${v.name === 'settings' || v.name === 'search' ? '' : '<button class="fab" data-act="capture">⚡ التقاط</button>'}`;
+  if (v.name === 'search' && UI.focusSearch) { const i = $('q'); if (i) i.focus(); UI.focusSearch = false; }
+}
+document.addEventListener('focusout', () => setTimeout(() => { if (UI.pendingRender && !typing() && UI.view.name !== 'edit') render(); }, 0));
+// A chapter of a deleted novel is hidden with it (and comes back when the novel is restored).
+const visible = t => alive(t) && (t.kind !== 'chapter' || alive(DB.texts[t.novel]));
+
+function homeHTML() {
+  const today = todayISO(), h = new Date().getHours(), name = (settings().name || '').trim();
+  const greet = (h < 12 ? 'صباح الخير' : 'مسا الخير') + (name ? ' يا ' + esc(name) : '');
+  const w = weekStats(DB.meta.days, today), c = counts();
+  const mem = onThisDay(DB.texts, today);
+  const memYears = mem ? +today.slice(0, 4) - +isoDay(mem.created).slice(0, 4) : 0;
+  const recent = Object.values(DB.texts).filter(t => visible(t) && t.kind !== 'novel' && !isLocked(t, today) && hasContent(t))
+    .sort((a, b) => b.updated - a.updated).slice(0, 3);
+  return `
+    <div class="top phone-only" style="padding-bottom:0"><span class="t"></span>
+      <button class="icon-btn" data-act="nav" data-to="search" aria-label="بحث">🔍</button>
+      <button class="icon-btn" data-act="nav" data-to="settings" aria-label="الإعدادات">⚙️</button></div>
+    ${!refs.synced && !Object.keys(DB.texts).length ? '<div class="banner">عم نجيب كتاباتك...</div>' : ''}
+    <div class="hello">${greet}</div>
+    <div class="muted">${fmtLong(today)}</div>
+    <div class="spark"><div class="k">🔥 شرارة اليوم</div><div class="q">«${esc(sparkFor(today))}»</div>
+      <button data-act="writeSpark">اكتب عنها</button></div>
+    <div class="week">
+      <div><b class="num">${fmtN(w.words)}</b><span>كلمة بآخر ٧ أيام</span></div>
+      <div><b class="num">${fmtN(w.days)}</b><span>${w.days === 1 ? 'يوم كتبت فيه' : 'أيام كتبت فيها'}</span></div>
+    </div>
+    <div class="h">الغرف</div>
+    <div class="rooms">${ROOMS.map(r => `<button class="room" data-act="openRoom" data-room="${r.id}">
+      <div class="ic" style="background:var(--r-${r.id})">${r.icon}</div><b>${r.name}</b>
+      <span>${c[r.id] ? fmtN(c[r.id]) + ' ' + r.unit : 'لسا فاضية'}</span></button>`).join('')}</div>
+    ${mem ? `<button class="memory" data-act="openText" data-id="${mem.id}"><div class="k">🕰️ زي هاليوم ${memYears === 1 ? 'من سنة' : memYears === 2 ? 'من سنتين' : 'من ' + fmtN(memYears) + ' سنين'}</div>
+      <p>«${esc(excerpt(mem.body, 110))}»</p></button>` : ''}
+    ${recent.length ? `<div class="h">آخر اللي كتبته</div>${recent.map(itemHTML).join('')}` : ''}`;
+}
+
+function itemHTML(t) {
+  const today = todayISO(), r = roomOf(t.room);
+  if (isLocked(t, today)) {
+    const left = daysBetween(today, t.lockUntil);
+    return `<button class="item locked" data-act="lockedLetter" data-id="${t.id}"><div class="lk">🔒</div>
+      <div class="to"><b>إلى: ${esc(t.to || 'بدون اسم')}</b></div>
+      <div class="d">رسالة للمستقبل. بتنفتح يوم ${fmtDay(t.lockUntil, true)} (باقي ${fmtN(left)} ${left === 1 ? 'يوم' : 'يوم'})</div></button>`;
+  }
+  const opened = t.room === 'letters' && t.lockUntil && !t.seen;
+  const day = t.room === 'diary' ? (t.day || isoDay(t.created)) : isoDay(t.updated);
+  const title = t.room === 'diary' ? (t.title || fmtLong(day)) : (t.title || (t.room === 'letters' ? '' : excerpt(t.body, 40) || 'بدون عنوان'));
+  const forNovel = t.room === 'ideas' && t.for && DB.texts[t.for] && alive(DB.texts[t.for]) ? ` · 📖 لـ«${esc(DB.texts[t.for].title)}»` : '';
+  return `<button class="item ${opened ? 'opened' : ''}" data-act="openText" data-id="${t.id}">
+    ${t.room === 'letters' ? `<div class="to">${opened ? '🔓 انفتحت! ' : ''}إلى: <b>${esc(t.to || 'بدون اسم')}</b></div>` : ''}
+    ${title ? `<div class="tt">${esc(title)}</div>` : ''}
+    ${t.room === 'ideas' || !t.title ? `<div class="ex">${esc(excerpt(t.body, 160))}</div>` : `<div class="ex">${esc(excerpt(t.body))}</div>`}
+    <div class="d">${UI.view.name !== 'room' ? r.icon + ' ' + r.name + ' · ' : ''}${fmtDay(day)} · ${fmtN(t.words || 0)} كلمة${forNovel}</div></button>`;
+}
+
+function roomHTML(id) {
+  const r = roomOf(id), list = roomItems(DB.texts, id);
+  const head = `<div class="top"><button class="icon-btn" data-act="back" aria-label="رجوع">→</button><span class="t">${r.icon} ${r.name}</span></div>`;
+  if (id === 'novels') {
+    return head + `<button class="newbtn" data-act="newNovel">+ رواية جديدة</button>` +
+      (list.length ? list.map(n => novelCover(n, true)).join('') : `<div class="empty"><div class="big">📖</div>كل رواية بتبلّش بفكرة. اعمل رواية جديدة، وبعدين ضيف فصولها وشخصياتها.</div>`);
+  }
+  const btn = { diary: 'افتح صفحة اليوم', letters: '+ رسالة جديدة', ideas: '+ فكرة جديدة', khawater: '+ خاطرة جديدة', tajalli: '+ تجلٍّ جديد' }[id];
+  const emptyMsg = {
+    diary: 'كل يوم إله صفحة. اكتب سطر واحد بس، بكفي.',
+    khawater: 'الخاطرة ما بدها ترتيب. اكتب اللي بقلبك.',
+    tajalli: 'لما يجيك نص كامل بلحظة صفا، هون مكانه.',
+    letters: 'رسالة لشخص، أو لحالك، أو لحدا راح. وبتقدر تقفل رسالة لتنفتح بالمستقبل.',
+    ideas: 'البذور الصغيرة: جملة، عنوان، مشهد. زر ⚡ بيحطها هون من أي مكان.',
+  }[id];
+  return head + `<button class="newbtn" data-act="newText" data-room="${id}">${btn}</button>` +
+    (list.length ? list.map(itemHTML).join('') : `<div class="empty"><div class="big">${r.icon}</div>${emptyMsg}</div>`);
+}
+
+function novelCover(n, link) {
+  const words = novelWords(DB.texts, n.id), goal = n.goal || 0, pct = goal ? Math.min(100, Math.round(words / goal * 100)) : 0;
+  return `<${link ? `button data-act="openNovel" data-id="${n.id}"` : 'div'} class="cover">
+    <div class="k">رواية · بلّشت ${fmtDay(isoDay(n.created))}</div>
+    <h2>${esc(n.title || 'رواية بدون عنوان')}</h2>
+    ${goal ? `<div class="bar"><i style="width:${pct}%"></i></div><small class="num">${fmtN(words)} من ${fmtN(goal)} كلمة (هدفك)</small>` : `<small class="num">${fmtN(words)} كلمة</small>`}
+  </${link ? 'button' : 'div'}>`;
+}
+function novelHTML(id) {
+  const n = DB.texts[id];
+  if (!alive(n)) return `<div class="top"><button class="icon-btn" data-act="back">→</button></div><div class="empty">هالرواية مش موجودة.</div>`;
+  const chs = novelChapters(DB.texts, id), seg = UI.seg;
+  const colors = ['#2E4A78', '#8A5A2B', '#4E7A5B', '#7A4E6E', '#A3402F', '#4E6E7A'];
+  let body = '';
+  if (seg === 'chapters') {
+    body = `<button class="newbtn" data-act="newChapter" data-id="${id}">+ فصل جديد</button>` + (chs.length ? chs.map((c, i) => `<div class="chap">
+      <div class="num">${fmtN(i + 1)}</div>
+      <button class="open" data-act="openText" data-id="${c.id}"><b>${esc(c.title || 'فصل بدون عنوان')}</b><span class="num">${fmtN(c.words || 0)} كلمة · ${fmtDay(isoDay(c.updated))}</span></button>
+      <div class="mv"><button data-act="moveChap" data-id="${c.id}" data-d="-1" aria-label="لفوق">▲</button><button data-act="moveChap" data-id="${c.id}" data-d="1" aria-label="لتحت">▼</button></div>
+    </div>`).join('') : '<div class="empty">لسا ما في فصول. ابدأ بالفصل الأول.</div>');
+  } else if (seg === 'chars') {
+    const chars = n.chars || [];
+    body = `<button class="newbtn" data-act="editChar" data-id="${id}">+ شخصية</button><div class="people">${chars.map((p, i) => `
+      <button class="person" data-act="editChar" data-id="${id}" data-c="${esc(p.id)}"><div class="av" style="background:${colors[i % colors.length]}">${esc((p.name || '؟').trim().charAt(0))}</div>
+      <b>${esc(p.name)}</b><span>${esc(p.role || '')}</span></button>`).join('')}</div>
+      ${chars.length ? '' : '<div class="empty">بطاقة لكل شخصية: اسمها، دورها، وكل التفاصيل اللي ما بدك تنساها.</div>'}`;
+  } else {
+    body = `<textarea class="notes" id="novelNotes" data-id="${id}" placeholder="الحبكة، الأماكن، الأزمنة، أي إشي عن الرواية...">${esc(n.notes || '')}</textarea>`;
+  }
+  return `<div class="top"><button class="icon-btn" data-act="back" aria-label="رجوع">→</button><span class="t">📖 روايات</span>
+      <button class="icon-btn" data-act="novelMenu" data-id="${id}" aria-label="خيارات">⋯</button></div>
+    ${novelCover(n, false)}
+    <div class="seg">${[['chapters', 'الفصول'], ['chars', 'الشخصيات'], ['notes', 'ملاحظات']].map(([k, l]) => `<button class="${seg === k ? 'on' : ''}" data-act="seg" data-seg="${k}">${l}</button>`).join('')}</div>
+    ${body}`;
+}
+
+function searchHTML() {
+  return `<div class="top"><button class="icon-btn" data-act="back" aria-label="رجوع">→</button><span class="t">🔍 بحث</span></div>
+    <input class="field" id="q" type="search" placeholder="دوّر على أي كلمة بكل كتاباتك" value="${esc(UI.q)}" autocomplete="off">
+    <div id="res">${resultsHTML()}</div>`;
+}
+function resultsHTML() {
+  const res = search(DB.texts, UI.q, todayISO()).filter(visible);
+  return `<div class="muted" style="margin:8px 2px 12px">${UI.q.trim() ? (res.length ? fmtN(res.length) + ' نتيجة' : 'ما لقيت إشي') : 'البحث ما بيفرّق بين الحركات ولا بين أ وا، ة وه'}</div>
+    ${res.slice(0, 60).map(itemHTML).join('')}`;
+}
+
+function settingsHTML() {
+  const s = settings(), opts = (key, list, cur) => `<div class="opts">${list.map(([v, l]) => `<button class="${cur === v ? 'on' : ''}" data-act="setOpt" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
+  const trash = Object.values(DB.texts).filter(t => t.deleted);
+  const sync = window.syncText ? window.syncText() : '';
+  return `<div class="top"><button class="icon-btn" data-act="back" aria-label="رجوع">→</button><span class="t">⚙️ الإعدادات</span></div>
+    <div class="card">
+      <div class="row"><label for="nm">اسمك (للتحية)</label><input class="field" id="nm" style="max-width:180px" value="${esc(s.name || '')}" placeholder="اختياري"></div>
+      <div class="row"><label>الشكل</label>${opts('theme', [['auto', 'تلقائي'], ['light', 'نهاري'], ['dark', 'ليلي']], s.theme || 'auto')}</div>
+      <div class="row"><label>حجم خط الكتابة</label>${opts('size', [['s', 'صغير'], ['m', 'وسط'], ['l', 'كبير']], s.size || 'm')}</div>
+      <div class="row"><label>المحذوفات</label><button class="small-btn" data-act="trash">${fmtN(trash.length)} ←</button></div>
+    </div>
+    ${window.extraSettings ? window.extraSettings() : ''}
+    <div class="muted" style="margin:14px 4px;line-height:1.9">${sync ? sync + '<br>' : ''}النسخة ${esc(VERSION)}<br>
+      عاللابتوب: Alt + رقم من ١ لـ ٨ بيحط الحركة (١ فتحة، ٢ ضمة، ٣ كسرة، ٤ سكون، ٥ شدة، ٦ ٧ ٨ تنوين).</div>`;
+}
+
+/* ----- the editor ----- */
+function openEditor(t, isNew) {
+  UI.ed = { t: { ...t }, isNew: !!isNew, dirty: false, timer: 0, savedWords: t.words || 0, remote: null };
+  go({ name: 'edit', id: t.id });
+}
+function renderEditor() {
+  const ed = UI.ed;
+  if (!ed) { UI.view = { name: 'home' }; render(); return; }
+  const t = ed.t, r = roomOf(t.room), hkClosed = pref('hk') === '0';
+  const novel = t.kind === 'chapter' ? DB.texts[t.novel] : null;
+  const day = t.room === 'diary' ? (t.day || isoDay(t.created)) : isoDay(t.created);
+  const label = novel ? `📖 ${esc(novel.title || 'رواية')}` : `${r.icon} ${r.name}`;
+  const ph = { diary: 'شو صار معك اليوم؟', khawater: 'اكتب اللي بقلبك...', tajalli: 'اكتب قبل ما تروح اللحظة...', letters: 'اكتب رسالتك...', ideas: 'الفكرة...', novels: 'ابدأ الفصل...' }[t.room] || '';
+  $('app').innerHTML = `<div class="shell ${UI.focus ? 'focus' : ''}">${sideHTML()}<main class="main">
+    <div class="ed">
+      <div class="ed-top">
+        <button class="icon-btn" data-act="back" aria-label="رجوع">→</button>
+        <span class="room-chip">${label}</span>
+        <span class="saved" id="savedState">${ed.isNew ? '' : 'محفوظ ✓'}</span>
+        <button class="icon-btn desk-only" data-act="focusMode" aria-label="وضع التركيز">⛶</button>
+        <button class="icon-btn" data-act="edMenu" aria-label="خيارات">⋯</button>
+      </div>
+      <div class="hk-bar ${hkClosed ? 'closed' : ''}" id="hkBar">
+        <div class="hk-head"><span>اكتب الحرف، بعدين اكبس الحركة</span><button class="toggle" data-act="hkToggle">${hkClosed ? 'حركات ⌃' : 'حركات ⌄'}</button></div>
+        <div class="hk-row">${MARKS.map(([m, n], i) => `<button class="hk" data-mark="${m}" title="Alt+${i + 1}"><span class="g">ب${m}</span><span class="n">${n}</span></button>`).join('')}</div>
+        <div class="pk-row">${PUNCT.map(p => `<button data-mark="${p}" data-plain="1">${p}</button>`).join('')}</div>
+      </div>
+      <div class="ed-body" id="edBody"><div class="ed-page">
+        <div id="remoteBar"></div>
+        ${t.room === 'letters' ? `<div class="ed-to"><span>إلى:</span><input id="edTo" value="${esc(t.to || '')}" placeholder="مين؟ (شخص، انت، حدا راح...)"></div>` : ''}
+        <input class="ed-title" id="edTitle" value="${esc(t.title || '')}" placeholder="${t.room === 'diary' ? esc(fmtLong(day)) : t.kind === 'chapter' ? 'عنوان الفصل' : 'عنوان (اختياري)'}">
+        <div class="ed-meta"><span>${fmtDay(day, true)}</span> · <span id="edWords" class="num">${fmtN(wordCount(t.body))}</span> كلمة</div>
+        ${t.spark ? `<div class="ed-spark">«${esc(t.spark)}»</div>` : ''}
+        <textarea class="ed-text" id="edText" placeholder="${ph}">${esc(t.body || '')}</textarea>
+      </div></div>
+    </div></main></div>`;
+  // The bar goes under the title on the laptop (CSS order) and stays above the keyboard on the phone.
+  const ta = $('edText');
+  grow(ta);
+  if (ed.isNew) setTimeout(() => (t.room === 'letters' && !t.to ? $('edTo') : ta).focus(), 60);
+}
+const grow = ta => { if (!ta) return; ta.style.height = 'auto'; ta.style.height = Math.max(ta.scrollHeight, 200) + 'px'; };
+
+function edInput() {
+  const ed = UI.ed; if (!ed) return;
+  ed.t.title = $('edTitle').value; ed.t.body = $('edText').value;
+  if ($('edTo')) ed.t.to = $('edTo').value;
+  ed.dirty = true;
+  $('edWords').textContent = fmtN(wordCount(ed.t.body));
+  $('savedState').textContent = '';
+  grow($('edText'));
+  clearTimeout(ed.timer); ed.timer = setTimeout(flushEditor, 700);
+}
+// Saves the open text now (if it changed). A new text is only kept once something is written in it.
+function flushEditor() {
+  const ed = UI.ed;
+  if (!ed || !ed.dirty) return;
+  clearTimeout(ed.timer);
+  ed.dirty = false;
+  if (ed.isNew && !hasContent(ed.t)) return;
+  const words = wordCount(ed.t.body);
+  if (words > ed.savedWords) store.bump(todayISO(), words - ed.savedWords);
+  ed.savedWords = words;
+  ed.t.words = words; ed.t.updated = Date.now(); ed.t.dev = DEV;
+  ed.isNew = false;
+  store.putText({ ...ed.t });
+  const s = $('savedState'); if (s) s.textContent = 'محفوظ ✓';
+}
+function leaveEditor() { UI.ed = null; }
+
+// Puts a mark (or punctuation) at the cursor. Uses the browser's own typing so Undo (Ctrl+Z) still works.
+function putMark(mark, plain) {
+  const ta = document.activeElement && /^(edText|edTitle|edTo)$/.test(document.activeElement.id) ? document.activeElement : (UI.lastField && $(UI.lastField)) || $('edText');
+  if (!ta) return;
+  ta.focus();
+  const s = ta.selectionStart, e = ta.selectionEnd, before = ta.value.slice(0, s);
+  let del = 0, text = mark;
+  if (!plain) {
+    if (!canMark(before)) { toast('اكتب الحرف أول، وبعدين الحركة'); return; }
+    ({ del, text } = markEdit(before.slice(-1), mark));
+  }
+  ta.setSelectionRange(s - del, e);
+  let ok = false;
+  try { ok = text ? document.execCommand('insertText', false, text) : (s - del === e || document.execCommand('delete')); } catch (err) {}
+  if (!ok) { ta.setRangeText(text, s - del, e, 'end'); ta.dispatchEvent(new Event('input', { bubbles: true })); }
+}
+
+// Another device changed the text that is open here.
+function remoteChanged(data) {
+  const ed = UI.ed;
+  if (!data) { $('remoteBar').innerHTML = `<div class="remote">هالنص انحذف من جهاز ثاني.</div>`; return; }
+  if (!ed.dirty && document.activeElement !== $('edText') && document.activeElement !== $('edTitle')) { takeRemote(data); return; }
+  ed.remote = data;
+  $('remoteBar').innerHTML = `<div class="remote"><span>هالنص تغيّر من جهاز ثاني.</span><button data-act="takeRemote">ورجيني الجديد</button></div>`;
+}
+function takeRemote(data) {
+  const ed = UI.ed; data = data || ed.remote; if (!data) return;
+  ed.t = { ...data }; ed.remote = null; ed.dirty = false; ed.savedWords = data.words || 0;
+  $('edTitle').value = data.title || ''; $('edText').value = data.body || ''; if ($('edTo')) $('edTo').value = data.to || '';
+  $('edWords').textContent = fmtN(wordCount(data.body)); $('remoteBar').innerHTML = ''; grow($('edText'));
+}
+A.takeRemote = () => takeRemote();
+// Called by the Firebase storage when texts change (on this device or another one).
+function applyRemote(changes) {
+  let edHit = null;
+  for (const { id, data, mine } of changes) {
+    if (UI.ed && UI.ed.t.id === id) {
+      if (mine || (data && data.dev === DEV)) continue;            // our own save coming back
+      if (data && data.updated <= UI.ed.t.updated) continue;
+      edHit = { data };
+    }
+    if (data) DB.texts[id] = data; else delete DB.texts[id];
+  }
+  if (UI.view.name === 'edit') { if (edHit) remoteChanged(edHit.data); }
+  else softRender();
+}
+
+/* ----- actions ----- */
+A.nav = b => { UI.focusSearch = b.dataset.to === 'search'; go({ name: b.dataset.to }); };
+A.openRoom = b => go({ name: 'room', room: b.dataset.room });
+A.openNovel = b => { UI.seg = 'chapters'; go({ name: 'novel', id: b.dataset.id }); };
+A.seg = b => { UI.seg = b.dataset.seg; render(); };
+const blank = (room, extra = {}) => ({ id: newId(), kind: 'text', room, title: '', body: '', created: Date.now(), updated: Date.now(), words: 0, ...extra });
+A.newText = b => {
+  const room = b.dataset.room;
+  if (room === 'diary') {
+    const today = todayISO(), hit = roomItems(DB.texts, 'diary').find(t => (t.day || isoDay(t.created)) === today);
+    return hit ? openEditor(hit) : openEditor(blank('diary', { day: today }), true);
+  }
+  openEditor(blank(room), true);
+};
+A.writeSpark = () => openEditor(blank('khawater', { spark: sparkFor(todayISO()) }), true);
+A.openText = b => {
+  const t = DB.texts[b.dataset.id]; if (!alive(t)) return;
+  if (t.room === 'letters' && t.lockUntil && !t.seen && !isLocked(t, todayISO())) store.putText({ ...t, seen: true });
+  openEditor(DB.texts[t.id]);
+};
+A.lockedLetter = b => { const t = DB.texts[b.dataset.id]; toast('🔒 هاي الرسالة بتنفتح يوم ' + fmtDay(t.lockUntil, true)); };
+A.hkToggle = () => { const bar = $('hkBar'), closed = !bar.classList.contains('closed'); bar.classList.toggle('closed', closed); pref('hk', closed ? '0' : '1'); bar.querySelector('.toggle').textContent = closed ? 'حركات ⌃' : 'حركات ⌄'; };
+A.focusMode = () => { UI.focus = !UI.focus; document.querySelector('.shell').classList.toggle('focus', UI.focus); };
+
+A.edMenu = () => {
+  const t = UI.ed.t, isLetter = t.room === 'letters' && !t.lockUntil;
+  openSheet(`<h3>خيارات</h3><div class="s">${esc(t.title || excerpt(t.body, 40) || 'نص جديد')}</div>
+    ${t.kind === 'text' ? '<button class="list-btn" data-act="moveMenu">↪️ انقله لغرفة ثانية</button>' : ''}
+    ${isLetter ? '<button class="list-btn" data-act="lockMenu">🔒 اقفلها كرسالة للمستقبل</button>' : ''}
+    <button class="list-btn danger" data-act="delText">🗑️ احذف${t.kind === 'chapter' ? ' الفصل' : ''}</button>`);
+};
+A.moveMenu = () => {
+  const t = UI.ed.t, novels = roomItems(DB.texts, 'novels');
+  openSheet(`<h3>لوين بدك تنقله؟</h3><div class="s">النص نفسه ما بتغيّر، بس بيصير بغرفة ثانية.</div>
+    ${ROOMS.filter(r => r.id !== 'novels' && r.id !== t.room).map(r => `<button class="list-btn" data-act="moveTo" data-room="${r.id}">${r.icon} ${r.name}</button>`).join('')}
+    ${novels.map(n => `<button class="list-btn" data-act="moveTo" data-novel="${n.id}">📖 فصل جديد بـ«${esc(n.title || 'رواية')}»</button>`).join('')}`);
+};
+A.moveTo = b => {
+  const t = UI.ed.t;
+  if (b.dataset.novel) {
+    const chs = novelChapters(DB.texts, b.dataset.novel);
+    Object.assign(t, { kind: 'chapter', room: 'novels', novel: b.dataset.novel, order: chs.length ? (chs[chs.length - 1].order || 0) + 1 : 1 });
+    delete t.for;
+  } else {
+    t.room = b.dataset.room;
+    if (t.room === 'diary' && !t.day) t.day = isoDay(t.created);
+  }
+  UI.ed.dirty = true; flushEditor(); closeSheet();
+  toast('انتقل ✓'); renderEditor();
+};
+A.lockMenu = () => {
+  const def = addDays(todayISO(), 365);
+  openSheet(`<h3>🔒 رسالة للمستقبل</h3><div class="s">بتنقفل وما بتقدر تقرأها ولا تعدّلها لحد اليوم اللي بتختاره. بتظل محفوظة ومتزامنة.</div>
+    <input type="date" id="lockDate" value="${def}" min="${addDays(todayISO(), 1)}">
+    <div class="srow"><button class="go blue" data-act="lockGo">اقفلها لهاليوم</button></div>`);
+};
+A.lockGo = () => {
+  const d = $('lockDate').value;
+  if (!d || d <= todayISO()) { toast('اختار يوم بعد اليوم'); return; }
+  const t = UI.ed.t;
+  if (!hasContent(t)) { toast('اكتب الرسالة أول'); return; }
+  t.lockUntil = d; t.seen = false; UI.ed.dirty = true; flushEditor(); closeSheet();
+  toast('🔒 انقفلت لحد ' + fmtDay(d, true));
+  go({ name: 'room', room: 'letters' }, true);
+};
+A.delText = b => {
+  if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'اكبس كمان مرة للتأكيد'; return; }
+  const ed = UI.ed; closeSheet();
+  if (!ed.isNew) { flushEditor(); store.putText({ ...DB.texts[ed.t.id] || ed.t, deleted: true, deletedAt: Date.now() }); }
+  ed.isNew = true; ed.dirty = false;
+  toast('انحذف. بترجعه من الإعدادات ← المحذوفات');
+  A.back();
+};
+
+A.capture = () => {
+  const novels = roomItems(DB.texts, 'novels');
+  UI.capTo = 'ideas'; UI.capFor = '';
+  openSheet(`<h3>⚡ التقاط سريع</h3><div class="s">اكتبها قبل ما تهرب.</div>
+    <textarea id="capText" placeholder="شو اللي خطر عبالك؟"></textarea>
+    <div class="chips" id="capChips">
+      <button class="chip on" data-act="capRoom" data-room="ideas">💡 أفكار</button>
+      <button class="chip" data-act="capRoom" data-room="khawater">🍃 خاطرة</button>
+      <button class="chip" data-act="capRoom" data-room="tajalli">✨ تجلّي</button>
+      ${novels.map(n => `<button class="chip" data-act="capRoom" data-room="ideas" data-for="${n.id}">📖 لـ«${esc(excerpt(n.title, 18) || 'رواية')}»</button>`).join('')}
+    </div>
+    <div class="srow">${SR ? '<button class="mic" id="micBtn" data-act="mic" aria-label="احكي">🎙️</button>' : ''}<button class="go" data-act="capSave">احفظ</button></div>`);
+  setTimeout(() => $('capText') && $('capText').focus(), 80);
+};
+A.capRoom = b => { UI.capTo = b.dataset.room; UI.capFor = b.dataset.for || ''; document.querySelectorAll('#capChips .chip').forEach(c => c.classList.toggle('on', c === b)); };
+A.capSave = () => {
+  const body = $('capText').value.trim();
+  if (!body) { toast('اكتب إشي أول'); return; }
+  const t = blank(UI.capTo, { body, words: wordCount(body) });
+  if (UI.capFor) t.for = UI.capFor;
+  store.putText(t); store.bump(todayISO(), t.words);
+  closeSheet(); toast('انحفظت ب' + roomOf(UI.capTo).name + ' ' + roomOf(UI.capTo).icon);
+  if (UI.view.name !== 'edit') render();
+};
+// Speaking instead of typing (where the browser offers it: Chrome on Android and on the laptop, Safari).
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null;
+function stopMic() { if (rec) { try { rec.stop(); } catch (e) {} rec = null; } }
+A.mic = () => {
+  if (rec) { stopMic(); $('micBtn')?.classList.remove('on'); return; }
+  try {
+    rec = new SR(); rec.lang = 'ar-JO'; rec.interimResults = false; rec.continuous = true;
+    rec.onresult = e => { const ta = $('capText'); if (!ta) return; for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) ta.value += (ta.value && !/\s$/.test(ta.value) ? ' ' : '') + e.results[i][0].transcript; };
+    rec.onend = () => { rec = null; $('micBtn')?.classList.remove('on'); };
+    rec.onerror = () => toast('ما قدرت أسمعك. اسمح للمايك وجرب');
+    rec.start(); $('micBtn').classList.add('on'); toast('احكي... واكبس المايك لتوقف');
+  } catch (e) { rec = null; toast('المايك مش شغال هون'); }
+};
+
+A.newNovel = () => openSheet(`<h3>📖 رواية جديدة</h3><div class="s">العنوان بتقدر تغيّره بعدين.</div>
+  <input type="text" id="nvTitle" placeholder="عنوان الرواية">
+  <input type="number" id="nvGoal" inputmode="numeric" placeholder="هدف الكلمات (مثلاً 50000)، اختياري">
+  <div class="srow"><button class="go blue" data-act="novelSave">ابدأ</button></div>`);
+A.novelSave = b => {
+  const title = $('nvTitle').value.trim(), goal = Math.max(0, parseInt($('nvGoal').value, 10) || 0);
+  if (!title) { toast('اكتب عنوان، ولو مؤقت'); return; }
+  if (b.dataset.id) { const n = { ...DB.texts[b.dataset.id], title, goal, updated: Date.now(), dev: DEV }; store.putText(n); closeSheet(); render(); return; }
+  const n = { id: newId(), kind: 'novel', room: 'novels', title, goal, chars: [], notes: '', created: Date.now(), updated: Date.now(), dev: DEV };
+  store.putText(n); closeSheet(); UI.seg = 'chapters'; go({ name: 'novel', id: n.id });
+};
+A.novelMenu = b => {
+  const n = DB.texts[b.dataset.id];
+  openSheet(`<h3>${esc(n.title)}</h3><div class="s">تعديل الرواية</div>
+    <input type="text" id="nvTitle" value="${esc(n.title)}" placeholder="عنوان الرواية">
+    <input type="number" id="nvGoal" inputmode="numeric" value="${n.goal || ''}" placeholder="هدف الكلمات، اختياري">
+    <div class="srow"><button class="go blue" data-act="novelSave" data-id="${n.id}">احفظ</button></div>
+    <button class="list-btn danger" data-act="delNovel" data-id="${n.id}" style="margin-top:8px">🗑️ احذف الرواية</button>`);
+};
+A.delNovel = b => {
+  if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'اكبس كمان مرة للتأكيد (الفصول بتروح معها للمحذوفات)'; return; }
+  const n = DB.texts[b.dataset.id]; store.putText({ ...n, deleted: true, deletedAt: Date.now() });
+  closeSheet(); toast('انحذفت. بترجعها من الإعدادات ← المحذوفات'); go({ name: 'room', room: 'novels' }, true);
+};
+A.newChapter = b => {
+  const chs = novelChapters(DB.texts, b.dataset.id);
+  openEditor(blank('novels', { kind: 'chapter', novel: b.dataset.id, order: chs.length ? (chs[chs.length - 1].order || 0) + 1 : 1 }), true);
+};
+A.moveChap = b => {
+  const c = DB.texts[b.dataset.id], chs = novelChapters(DB.texts, c.novel), i = chs.findIndex(x => x.id === c.id), j = i + Number(b.dataset.d);
+  if (j < 0 || j >= chs.length) return;
+  // Number them again in their new order, so two chapters never share a place.
+  [chs[i], chs[j]] = [chs[j], chs[i]];
+  chs.forEach((x, k) => { if ((x.order || 0) !== k + 1) store.putText({ ...x, order: k + 1, dev: DEV }); });
+  render();
+};
+A.editChar = b => {
+  const n = DB.texts[b.dataset.id], p = (n.chars || []).find(x => x.id === b.dataset.c) || { id: '', name: '', role: '', note: '' };
+  openSheet(`<h3>${p.id ? esc(p.name) : '+ شخصية جديدة'}</h3><div class="s">كل التفاصيل اللي ما بدك تنساها: عمرها، شكلها، ماضيها...</div>
+    <input type="text" id="chName" value="${esc(p.name)}" placeholder="الاسم">
+    <input type="text" id="chRole" value="${esc(p.role)}" placeholder="دورها (البطل، أخته...)">
+    <textarea id="chNote" placeholder="ملاحظات عنها">${esc(p.note)}</textarea>
+    <div class="srow"><button class="go blue" data-act="charSave" data-id="${n.id}" data-c="${esc(p.id)}">احفظ</button></div>
+    ${p.id ? `<button class="list-btn danger" data-act="charDel" data-id="${n.id}" data-c="${esc(p.id)}" style="margin-top:8px">🗑️ احذف الشخصية</button>` : ''}`);
+};
+A.charSave = b => {
+  const name = $('chName').value.trim(); if (!name) { toast('اكتب الاسم'); return; }
+  const n = { ...DB.texts[b.dataset.id] }, chars = [...(n.chars || [])], p = { id: b.dataset.c || newId(), name, role: $('chRole').value.trim(), note: $('chNote').value };
+  const i = chars.findIndex(x => x.id === p.id); if (i >= 0) chars[i] = p; else chars.push(p);
+  store.putText({ ...n, chars, updated: Date.now(), dev: DEV }); closeSheet(); render();
+};
+A.charDel = b => {
+  if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'اكبس كمان مرة للتأكيد'; return; }
+  const n = DB.texts[b.dataset.id];
+  store.putText({ ...n, chars: (n.chars || []).filter(x => x.id !== b.dataset.c), updated: Date.now(), dev: DEV }); closeSheet(); render();
+};
+
+A.setOpt = b => { store.putMeta({ settings: { [b.dataset.k]: b.dataset.v } }); render(); };
+A.trash = () => {
+  const list = Object.values(DB.texts).filter(t => t.deleted).sort((a, b) => b.deletedAt - a.deletedAt);
+  openSheet(`<h3>🗑️ المحذوفات</h3><div class="s">اللي بتحذفه بيضل هون لحد ما ترجعه أو تحذفه للأبد.</div>
+    ${list.length ? list.map(t => `<div class="list-btn"><span style="flex:1">${roomOf(t.room).icon} ${esc(t.title || excerpt(t.body, 40) || 'بدون عنوان')}</span>
+      <button class="small-btn" data-act="restore" data-id="${t.id}">رجّع</button>
+      <button class="small-btn danger" data-act="forever" data-id="${t.id}">للأبد</button></div>`).join('') : '<div class="empty">فاضية</div>'}`);
+};
+A.restore = b => { const t = { ...DB.texts[b.dataset.id] }; delete t.deleted; delete t.deletedAt; store.putText(t); toast('رجع ✓'); A.trash(); render(); };
+A.forever = b => {
+  if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'متأكد؟ ما برجع'; return; }
+  const t = DB.texts[b.dataset.id];
+  if (t.kind === 'novel') Object.values(DB.texts).filter(c => c.kind === 'chapter' && c.novel === t.id).forEach(c => store.dropText(c.id));
+  store.dropText(t.id); A.trash(); render();
+};
+
+/* ----- events ----- */
+document.addEventListener('click', e => {
+  const m = e.target.closest('[data-mark]');
+  if (m) { putMark(m.dataset.mark, !!m.dataset.plain); return; }
+  const b = e.target.closest('[data-act]');
+  if (b && A[b.dataset.act]) A[b.dataset.act](b, e);
+});
+// Pressing a mark must not take the cursor (and the phone's keyboard) away from the text.
+document.addEventListener('mousedown', e => { if (e.target.closest('[data-mark]')) e.preventDefault(); });
+document.addEventListener('input', e => {
+  const id = e.target.id;
+  if (id === 'edText' || id === 'edTitle' || id === 'edTo') edInput();
+  else if (id === 'q') { UI.q = e.target.value; $('res').innerHTML = resultsHTML(); }
+  else if (id === 'nm') { clearTimeout(UI.nmT); UI.nmT = setTimeout(() => store.putMeta({ settings: { name: e.target.value.trim() } }), 600); }
+  else if (id === 'novelNotes') {
+    clearTimeout(UI.notesT);
+    UI.notesT = setTimeout(() => { const n = DB.texts[e.target.dataset.id]; if (n) store.putText({ ...n, notes: e.target.value, updated: Date.now(), dev: DEV }); }, 700);
+  }
+});
+document.addEventListener('focusin', e => { if (/^(edText|edTitle|edTo)$/.test(e.target.id)) UI.lastField = e.target.id; });
+document.addEventListener('keydown', e => {
+  if (!e.altKey || !/^(edText|edTitle|edTo)$/.test(e.target.id)) return;
+  const k = (e.code || '').match(/^(Digit|Numpad)([1-8])$/); if (!k) return;
+  e.preventDefault(); putMark(MARKS[+k[2] - 1][0]);
+});
+// Save straight away when the app goes to the background or closes.
+document.addEventListener('visibilitychange', () => { if (document.hidden) flushEditor(); });
+window.addEventListener('pagehide', flushEditor);
+// Keep the editor (and its harakat bar) exactly above the phone's keyboard, also on iPhone.
+if (window.visualViewport) {
+  const vv = window.visualViewport, fit = () => {
+    document.documentElement.style.setProperty('--vvh', vv.height + 'px');
+    document.documentElement.style.setProperty('--vvt', vv.offsetTop + 'px');
+  };
+  vv.addEventListener('resize', fit); vv.addEventListener('scroll', fit); fit();
+}
+if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { if (UI.view.name !== 'edit') render(); else applyTheme(); });
+
+function boot() {
+  try { history.replaceState({ v: { name: 'home' }, first: true }, ''); } catch (e) {}
+  render();
+}
+load();
+</script>
+</body>
+</html>
