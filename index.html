@@ -241,7 +241,7 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordRe
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, onSnapshot, collection, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig } from './config.js';
 
-const VERSION = "1";
+const VERSION = "2";
 /* ---------- logic ---------- */
 // The six rooms of the app. A novel is a "novel" item in the novels room; its chapters are "chapter" items.
 const ROOMS = [
@@ -411,7 +411,7 @@ async function authGo() {
   catch (e) { $('aErr').textContent = AUTH_ERR[e.code] || 'ما زبط. جرب كمان مرة'; $('aErr').classList.remove('ok'); }
   finally { btn.disabled = false; }
 }
-$('auth').addEventListener('click', async e => {
+document.getElementById('auth').addEventListener('click', async e => {
   const id = e.target.closest('button')?.id;
   if (id === 'aGo') authGo();
   if (id === 'aReset') {
@@ -421,7 +421,7 @@ $('auth').addEventListener('click', async e => {
     catch (err) { $('aErr').textContent = AUTH_ERR[err.code] || 'ما زبط. جرب كمان مرة'; }
   }
 });
-$('auth').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.target.id === 'aE' || e.target.id === 'aP')) authGo(); });
+document.getElementById('auth').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.target.id === 'aE' || e.target.id === 'aP')) authGo(); });
 
 window.extraSettings = () => `<div class="h">الحساب</div><div class="card"><div class="row"><span class="muted" dir="ltr">${esc(refs.email)}</span>
   <button class="small-btn danger" data-act="signout">تسجيل الخروج</button></div></div>`;
