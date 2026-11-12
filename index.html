@@ -241,7 +241,7 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordRe
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, onSnapshot, collection, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig } from './config.js';
 
-const VERSION = "2";
+const VERSION = "3";
 /* ---------- logic ---------- */
 // The six rooms of the app. A novel is a "novel" item in the novels room; its chapters are "chapter" items.
 const ROOMS = [
@@ -725,7 +725,22 @@ function renderEditor() {
   grow(ta);
   if (ed.isNew) setTimeout(() => (t.room === 'letters' && !t.to ? $('edTo') : ta).focus(), 60);
 }
-const grow = ta => { if (!ta) return; ta.style.height = 'auto'; ta.style.height = Math.max(ta.scrollHeight, 200) + 'px'; };
+// The text box grows with the text, so the page scrolls (not the box). The height is measured on a hidden copy:
+// shrinking the real box to measure it would make the page jump up while he writes or adds a haraka.
+let mirror = null;
+const grow = ta => {
+  if (!ta) return;
+  if (!mirror) {
+    mirror = document.createElement('textarea');
+    mirror.className = 'ed-text'; mirror.tabIndex = -1; mirror.setAttribute('aria-hidden', 'true');
+    Object.assign(mirror.style, { position: 'absolute', visibility: 'hidden', pointerEvents: 'none', top: '0', left: '-9999px', height: '0', minHeight: '0' });
+    document.body.appendChild(mirror);
+  }
+  mirror.style.width = ta.clientWidth + 'px';
+  mirror.value = ta.value;
+  const h = Math.max(mirror.scrollHeight, 200) + 'px';
+  if (ta.style.height !== h) ta.style.height = h;
+};
 
 function edInput() {
   const ed = UI.ed; if (!ed) return;
@@ -734,7 +749,13 @@ function edInput() {
   ed.dirty = true;
   $('edWords').textContent = fmtN(wordCount(ed.t.body));
   $('savedState').textContent = '';
-  grow($('edText'));
+  const ta = $('edText');
+  grow(ta);
+  // Writing at the very end: keep the last line in view as the text gets longer.
+  if (document.activeElement === ta && ta.selectionEnd === ta.value.length) {
+    const box = $('edBody'), gap = ta.getBoundingClientRect().bottom - box.getBoundingClientRect().bottom;
+    if (gap > 0) box.scrollTop += gap + 24;
+  }
   clearTimeout(ed.timer); ed.timer = setTimeout(flushEditor, 700);
 }
 // Saves the open text now (if it changed). A new text is only kept once something is written in it.
@@ -758,7 +779,7 @@ function leaveEditor() { UI.ed = null; }
 function putMark(mark, plain) {
   const ta = document.activeElement && /^(edText|edTitle|edTo)$/.test(document.activeElement.id) ? document.activeElement : (UI.lastField && $(UI.lastField)) || $('edText');
   if (!ta) return;
-  ta.focus();
+  if (document.activeElement !== ta) ta.focus({ preventScroll: true });
   const s = ta.selectionStart, e = ta.selectionEnd, before = ta.value.slice(0, s);
   let del = 0, text = mark;
   if (!plain) {
