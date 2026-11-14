@@ -241,7 +241,7 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordRe
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, onSnapshot, collection, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig } from './config.js';
 
-const VERSION = "3";
+const VERSION = "4";
 /* ---------- logic ---------- */
 // The six rooms of the app. A novel is a "novel" item in the novels room; its chapters are "chapter" items.
 const ROOMS = [
@@ -849,6 +849,7 @@ A.focusMode = () => { UI.focus = !UI.focus; document.querySelector('.shell').cla
 A.edMenu = () => {
   const t = UI.ed.t, isLetter = t.room === 'letters' && !t.lockUntil;
   openSheet(`<h3>خيارات</h3><div class="s">${esc(t.title || excerpt(t.body, 40) || 'نص جديد')}</div>
+    ${t.room === 'diary' ? '<button class="list-btn" data-act="dayMenu">📅 غيّر اليوم</button>' : ''}
     ${t.kind === 'text' ? '<button class="list-btn" data-act="moveMenu">↪️ انقله لغرفة ثانية</button>' : ''}
     ${isLetter ? '<button class="list-btn" data-act="lockMenu">🔒 اقفلها كرسالة للمستقبل</button>' : ''}
     <button class="list-btn danger" data-act="delText">🗑️ احذف${t.kind === 'chapter' ? ' الفصل' : ''}</button>`);
@@ -877,6 +878,21 @@ A.lockMenu = () => {
   openSheet(`<h3>🔒 رسالة للمستقبل</h3><div class="s">بتنقفل وما بتقدر تقرأها ولا تعدّلها لحد اليوم اللي بتختاره. بتظل محفوظة ومتزامنة.</div>
     <input type="date" id="lockDate" value="${def}" min="${addDays(todayISO(), 1)}">
     <div class="srow"><button class="go blue" data-act="lockGo">اقفلها لهاليوم</button></div>`);
+};
+// A diary page belongs to one day. He can move it to another day (he wrote yesterday's page today).
+A.dayMenu = () => {
+  const t = UI.ed.t, cur = t.day || isoDay(t.created);
+  openSheet(`<h3>📅 هاي الصفحة عن أي يوم؟</h3><div class="s">إذا كتبت اليوم عن يوم قبل، اختار اليوم الصح. الكتابة نفسها ما بتتغيّر.</div>
+    <input type="date" id="dayDate" value="${cur}" max="${todayISO()}">
+    <div class="srow"><button class="go blue" data-act="dayGo">انقلها لهاليوم</button></div>`);
+};
+A.dayGo = () => {
+  const d = $('dayDate').value, t = UI.ed.t;
+  if (!d || d > todayISO()) { toast('اختار اليوم أو يوم قبله'); return; }
+  if (d === (t.day || isoDay(t.created))) { closeSheet(); return; }
+  if (roomItems(DB.texts, 'diary').some(x => x.id !== t.id && (x.day || isoDay(x.created)) === d)) { toast('في صفحة لهاليوم من قبل'); return; }
+  t.day = d; UI.ed.dirty = true; flushEditor(); closeSheet();
+  toast('صارت عن ' + fmtDay(d, true)); renderEditor();
 };
 A.lockGo = () => {
   const d = $('lockDate').value;
