@@ -241,7 +241,7 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordRe
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, onSnapshot, collection, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig } from './config.js';
 
-const VERSION = "4";
+const VERSION = "5";
 /* ---------- logic ---------- */
 // The six rooms of the app. A novel is a "novel" item in the novels room; its chapters are "chapter" items.
 const ROOMS = [
@@ -890,9 +890,31 @@ A.dayGo = () => {
   const d = $('dayDate').value, t = UI.ed.t;
   if (!d || d > todayISO()) { toast('اختار اليوم أو يوم قبله'); return; }
   if (d === (t.day || isoDay(t.created))) { closeSheet(); return; }
-  if (roomItems(DB.texts, 'diary').some(x => x.id !== t.id && (x.day || isoDay(x.created)) === d)) { toast('في صفحة لهاليوم من قبل'); return; }
+  const other = roomItems(DB.texts, 'diary').find(x => x.id !== t.id && (x.day || isoDay(x.created)) === d);
+  if (other) {
+    // That day already has a page: say so clearly and offer to join the two pages (nothing is lost).
+    openSheet(`<h3>📅 في صفحة ليوم ${esc(fmtDay(d, true))} من قبل</h3>
+      <div class="s">«${esc(excerpt(other.body, 90) || other.title || 'صفحة فاضية')}»</div>
+      <div class="s">بتقدر تضمّ الصفحتين: كتابة هاي الصفحة بتنزاد بآخر صفحة ${esc(fmtDay(d, true))}، وهاي الصفحة بتروح عالمحذوفات (بترجعها من الإعدادات إذا بدك).</div>
+      <div class="srow"><button class="go blue" data-act="dayJoin" data-id="${other.id}">ضمّهم بصفحة وحدة</button></div>
+      <button class="list-btn" data-act="dayMenu">↩️ اختار يوم تاني</button>`);
+    return;
+  }
   t.day = d; UI.ed.dirty = true; flushEditor(); closeSheet();
   toast('صارت عن ' + fmtDay(d, true)); renderEditor();
+};
+A.dayJoin = b => {
+  const ed = UI.ed, t = ed.t, x = DB.texts[b.dataset.id];
+  if (!alive(x)) { closeSheet(); return; }
+  if (!hasContent(t)) { closeSheet(); return openEditor(x); }
+  ed.dirty = true; flushEditor();
+  const add = [t.title && t.title.trim(), t.body].filter(Boolean).join('\n');
+  const body = [x.body, add].filter(s => s && s.trim()).join('\n\n');
+  store.putText({ ...x, body, words: wordCount(body), updated: Date.now(), dev: DEV });
+  store.putText({ ...DB.texts[t.id] || t, deleted: true, deletedAt: Date.now() });
+  ed.isNew = true; ed.dirty = false; closeSheet();
+  toast('انضمّوا بصفحة ' + fmtDay(x.day || isoDay(x.created), true));
+  openEditor(DB.texts[x.id]);
 };
 A.lockGo = () => {
   const d = $('lockDate').value;
