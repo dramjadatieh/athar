@@ -21,7 +21,7 @@
   --ink:#1F2733; --ink2:#5B6472; --ink3:#8C8576;
   --blue:#2E4A78; --blue-soft:#E3E9F3; --sepia:#8A5A2B; --sepia-soft:#F1E3CF; --sepia-ink:#4A3A28;
   --spark:#2E4A78; --on-spark:#F6F0E4; --ok:#3C7A4E; --red:#A3402F;
-  --r-diary:#E3E9F3; --r-khawater:#F1E3CF; --r-tajalli:#EDE3F3; --r-novels:#E2EFE6; --r-letters:#F6E2DF; --r-ideas:#FBF0D2;
+  --r-diary:#E3E9F3; --r-khawater:#F1E3CF; --r-tajalli:#EDE3F3; --r-novels:#E2EFE6; --r-letters:#F6E2DF; --r-ideas:#FBF0D2; --r-teeth:#E0F0F0; --teal:#245E5E; --ok-soft:#E2EFE6;
   --ui:'IBM Plex Sans Arabic',system-ui,sans-serif; --pen:'Amiri',serif; --pen-size:21px;
 }
 :root[data-theme="dark"]{
@@ -29,7 +29,7 @@
   --ink:#ECE6D8; --ink2:#B9B3A6; --ink3:#8C8679;
   --blue:#9DB8E8; --blue-soft:#26324A; --sepia:#D49A5E; --sepia-soft:#3A2D20; --sepia-ink:#EAD6BC;
   --spark:#24385C; --on-spark:#F1EADB; --ok:#7CC293; --red:#E07C69;
-  --r-diary:#26324A; --r-khawater:#3A2D20; --r-tajalli:#352B40; --r-novels:#22362A; --r-letters:#40282A; --r-ideas:#3D3520;
+  --r-diary:#26324A; --r-khawater:#3A2D20; --r-tajalli:#352B40; --r-novels:#22362A; --r-letters:#40282A; --r-ideas:#3D3520; --r-teeth:#1F3838; --teal:#8FD0D0; --ok-soft:#22362A;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -218,6 +218,42 @@ textarea.notes{width:100%;min-height:50vh;border:1px solid var(--line);border-ra
 .small-btn{font-size:13px;padding:5px 10px;border-radius:8px;background:var(--paper2)}
 .small-btn.danger{color:var(--red)}
 
+/* دفتر السنّ */
+.due{background:var(--spark);color:var(--on-spark);border-radius:18px;padding:12px 14px;margin-bottom:12px}
+.due .k{font-size:12px;opacity:.85}
+.due .q{font-family:var(--pen);font-size:19px;line-height:1.6;margin:6px 0 2px}
+.due .m{font-size:12px;opacity:.8}
+.due .row2{display:flex;gap:6px;margin-top:8px}
+.due button{border-radius:999px;padding:6px 14px;font-weight:600;font-size:13px}
+.due .y{background:var(--on-spark);color:var(--spark)}
+:root[data-theme="dark"] .due .y{color:#1F2733}
+.due .n{background:rgba(255,255,255,.15);color:var(--on-spark)}
+.fchips{display:flex;gap:5px;overflow-x:auto;margin:0 0 8px;padding-bottom:2px;scrollbar-width:none}
+.fchips .chip{flex:none;white-space:nowrap}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.tag{font-size:11px;border-radius:999px;padding:2px 8px;background:var(--r-teeth);color:var(--teal);font-weight:600}
+.tag.s{background:var(--paper2);color:var(--ink2);font-weight:500}
+.tag.i{background:var(--sepia-soft);color:var(--sepia)}
+.item .pearl{font-family:var(--pen);font-size:18px;line-height:1.6;font-weight:700}
+.item .ap{font-size:13px;color:var(--ok);margin-top:3px}
+.item .cert{font-size:12px;color:var(--blue);margin-top:4px;overflow-wrap:anywhere}
+.total{background:var(--ok-soft);border-radius:16px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.total b{font-size:30px;color:var(--ok);line-height:1}
+.total span{font-size:13px;color:var(--ink2);line-height:1.6}
+.dent-lbl{font-size:12px;color:var(--ink3);font-weight:600;margin:6px 2px 4px}
+.dent .chips{margin:0 0 6px}
+.dent-line{min-width:0;display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:6px 10px;margin-top:8px}
+.dent-line span{color:var(--ink3);font-size:13px;white-space:nowrap}
+.dent-line input{flex:1;min-width:0;width:0;border:0;background:transparent;outline:none;font-size:16px;padding:4px 0}
+.dent-line a{font-size:13px;color:var(--blue);white-space:nowrap}
+.dent-two{display:flex;gap:8px;flex-wrap:wrap}
+.dent-two .dent-line{flex:1 1 150px}
+.dent-flag{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:start;background:var(--sepia-soft);color:var(--sepia-ink);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px}
+.sw{width:42px;height:24px;border-radius:99px;background:var(--line);position:relative;flex:none;transition:background .15s}
+.sw::after{content:'';position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:right .15s}
+.sw.on{background:var(--sepia)} .sw.on::after{right:21px}
+.ed-text.short{min-height:22vh}
+
 #auth{position:fixed;inset:0;z-index:70;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .auth-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px 20px 18px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px;text-align:center}
 .auth-logo{width:72px;height:72px;border-radius:18px;margin:0 auto}
@@ -241,7 +277,7 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordRe
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, onSnapshot, collection, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig } from './config.js';
 
-const VERSION = "5";
+const VERSION = "6";
 /* ---------- logic ---------- */
 // The six rooms of the app. A novel is a "novel" item in the novels room; its chapters are "chapter" items.
 const ROOMS = [
@@ -251,8 +287,46 @@ const ROOMS = [
   { id: 'novels', name: 'روايات', icon: '📖', unit: 'رواية' },
   { id: 'letters', name: 'رسائل', icon: '✉️', unit: 'رسالة' },
   { id: 'ideas', name: 'أفكار', icon: '💡', unit: 'بذرة' },
+  { id: 'teeth', name: 'دفتر السنّ', icon: '🦷', unit: 'فائدة' },
 ];
 const roomOf = id => ROOMS.find(r => r.id === id) || ROOMS[1];
+
+// دفتر السنّ: what he learns in dentistry. A note is a normal text in room 'teeth' with: src (where from), topic,
+// title = the pearl in one line, body = details, apply = how he will use it, interview (a story for a job interview),
+// hours + cert (courses: CPD hours and where the certificate is), rev + revNext (spaced review).
+const DENT_SRC = [['work', '🦷 من شغلي'], ['colleague', '👥 من زميل'], ['video', '▶️ فيديو'], ['course', '🎓 كورس'], ['read', '📚 كتاب أو مقال']];
+const DENT_TOPICS = [['endo', 'Endo'], ['resto', 'Resto'], ['prostho', 'Prostho'], ['perio', 'Perio'], ['surgery', 'Surgery'],
+  ['pedo', 'Pedo'], ['ortho', 'Ortho'], ['implant', 'Implant'], ['clinic', 'إدارة العيادة والمرضى']];
+const dentLabel = (list, id) => (list.find(x => x[0] === id) || [])[1] || '';
+// A note comes back 1 day after it is written, then 7 days, then 30 days after each review; then it is done.
+const REVIEW_GAPS = [1, 7, 30];
+const reviewStart = day => ({ rev: 0, revNext: addDays(day, REVIEW_GAPS[0]) });
+function reviewDone(t, today) {
+  const rev = (t.rev || 0) + 1;
+  return { rev, revNext: rev < REVIEW_GAPS.length ? addDays(today, REVIEW_GAPS[rev]) : null };
+}
+const isDent = t => alive(t) && t.room === 'teeth' && t.kind === 'text';
+// Notes to review today (late ones too: they wait for him), oldest due first.
+const dueReviews = (texts, today) => Object.values(texts).filter(t => isDent(t) && t.revNext && t.revNext <= today && hasContent(t))
+  .sort((a, b) => a.revNext.localeCompare(b.revNext) || a.created - b.created);
+// Typed hours: Arabic digits and a decimal comma (٫ or ,) are fine. "2,5" = 2.5. Nonsense = 0.
+const parseHours = s => { const n = parseFloat(String(s ?? '').replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[٫,]/g, '.')); return isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0; };
+const dentDay = t => t.day || isoDay(t.created);
+// CPD hours from courses: all of them, and this year's only.
+function courseHours(texts, year) {
+  const list = Object.values(texts).filter(t => isDent(t) && t.src === 'course');
+  const sum = l => Math.round(l.reduce((s, t) => s + (Number(t.hours) || 0), 0) * 100) / 100;
+  return { total: sum(list), year: sum(list.filter(t => dentDay(t).slice(0, 4) === String(year))), count: list.length };
+}
+// The room's list after its tab (all / interview / courses), topic, source and search box.
+function dentList(texts, f = {}) {
+  const q = normAr(f.q || '').trim();
+  return Object.values(texts).filter(t => isDent(t)
+    && (f.view !== 'interview' || t.interview) && (f.view !== 'course' || t.src === 'course')
+    && (!f.topic || t.topic === f.topic) && (!f.src || t.src === f.src)
+    && (!q || normAr([t.title, t.body, t.apply, t.cert, dentLabel(DENT_TOPICS, t.topic)].join(' ')).includes(q)))
+    .sort((a, b) => dentDay(b).localeCompare(dentDay(a)) || b.created - a.created);
+}
 
 // Harakat in the order of the bar. SHADDA combines with the others (it is written before them).
 const SHADDA = 'ّ';
@@ -326,7 +400,7 @@ function search(texts, q, today) {
   const n = normAr(q).trim();
   if (!n) return [];
   return Object.values(texts).filter(t => alive(t) && !isLocked(t, today) && t.kind !== 'novel'
-    && normAr([t.title, t.body, t.to].join(' ')).includes(n)).sort((a, b) => b.updated - a.updated);
+    && normAr([t.title, t.body, t.to, t.apply].join(' ')).includes(n)).sort((a, b) => b.updated - a.updated);
 }
 
 const novelChapters = (texts, nid) => Object.values(texts).filter(t => alive(t) && t.kind === 'chapter' && t.novel === nid)
@@ -341,7 +415,7 @@ function roomItems(texts, room) {
   return list.sort((a, b) => b.updated - a.updated);
 }
 const excerpt = (s, n = 120) => { const x = (s || '').replace(/\s+/g, ' ').trim(); return x.length > n ? x.slice(0, n) + '…' : x; };
-const hasContent = t => !!((t.title || '').trim() || (t.body || '').trim() || (t.to || '').trim());
+const hasContent = t => !!((t.title || '').trim() || (t.body || '').trim() || (t.to || '').trim() || (t.apply || '').trim());
 
 /* ---------- storage (Firebase) ---------- */
 
@@ -471,8 +545,12 @@ const fmtLong = iso => { const [y, m, d] = iso.split('-').map(Number); return ne
 const DEV = (() => { try { let d = localStorage.getItem('athar-dev'); if (!d) { d = newId(); localStorage.setItem('athar-dev', d); } return d; } catch (e) { return 'x'; } })();
 const pref = (k, v) => { try { if (v === undefined) return localStorage.getItem('athar-' + k); localStorage.setItem('athar-' + k, v); } catch (e) { return null; } };
 const settings = () => DB.meta.settings || {};
+// "بعد يوم / يومين / ٧ أيام / ٣٠ يوم" and "ساعة / ساعتين / ٣ ساعات / ٢٫٥ ساعة".
+const nDays = n => n === 1 ? 'يوم' : n === 2 ? 'يومين' : fmtN(n) + (n <= 10 ? ' أيام' : ' يوم');
+const nHours = n => n === 1 ? 'ساعة' : n === 2 ? 'ساعتين' : fmtN(n) + (Number.isInteger(n) && n >= 3 && n <= 10 ? ' ساعات' : ' ساعة');
 
-const UI = { view: { name: 'home' }, ed: null, seg: 'chapters', q: '', pendingRender: false, focus: false };
+const UI = { view: { name: 'home' }, ed: null, seg: 'chapters', q: '', pendingRender: false, focus: false,
+  dent: { view: 'all', topic: '', src: '', q: '' } };
 const A = {};
 
 let toastT = 0;
@@ -556,7 +634,7 @@ const visible = t => alive(t) && (t.kind !== 'chapter' || alive(DB.texts[t.novel
 function homeHTML() {
   const today = todayISO(), h = new Date().getHours(), name = (settings().name || '').trim();
   const greet = (h < 12 ? 'صباح الخير' : 'مسا الخير') + (name ? ' يا ' + esc(name) : '');
-  const w = weekStats(DB.meta.days, today), c = counts();
+  const w = weekStats(DB.meta.days, today), c = counts(), due = dueReviews(DB.texts, today).length;
   const mem = onThisDay(DB.texts, today);
   const memYears = mem ? +today.slice(0, 4) - +isoDay(mem.created).slice(0, 4) : 0;
   const recent = Object.values(DB.texts).filter(t => visible(t) && t.kind !== 'novel' && !isLocked(t, today) && hasContent(t))
@@ -577,13 +655,28 @@ function homeHTML() {
     <div class="h">الغرف</div>
     <div class="rooms">${ROOMS.map(r => `<button class="room" data-act="openRoom" data-room="${r.id}">
       <div class="ic" style="background:var(--r-${r.id})">${r.icon}</div><b>${r.name}</b>
-      <span>${c[r.id] ? fmtN(c[r.id]) + ' ' + r.unit : 'لسا فاضية'}</span></button>`).join('')}</div>
+      <span>${c[r.id] ? fmtN(c[r.id]) + ' ' + r.unit : 'لسا فاضية'}${r.id === 'teeth' && due ? ' · ' + fmtN(due) + ' للمراجعة اليوم' : ''}</span></button>`).join('')}</div>
     ${mem ? `<button class="memory" data-act="openText" data-id="${mem.id}"><div class="k">🕰️ زي هاليوم ${memYears === 1 ? 'من سنة' : memYears === 2 ? 'من سنتين' : 'من ' + fmtN(memYears) + ' سنين'}</div>
       <p>«${esc(excerpt(mem.body, 110))}»</p></button>` : ''}
     ${recent.length ? `<div class="h">آخر اللي كتبته</div>${recent.map(itemHTML).join('')}` : ''}`;
 }
 
+// One dental note in a list: topic and source tags, the pearl, how he will apply it, and where its review stands.
+function dentItemHTML(t) {
+  const today = todayISO(), here = UI.view.name === 'room';
+  const rev = t.revNext ? (t.revNext <= today ? '🔁 للمراجعة اليوم' : 'المراجعة الجاية بعد ' + nDays(daysBetween(today, t.revNext)))
+    : (t.rev >= REVIEW_GAPS.length ? 'خلصت مراجعاتها ✓' : '');
+  const course = t.src === 'course' ? (t.hours ? ' · ' + nHours(t.hours) : '') : '';
+  return `<button class="item" data-act="openText" data-id="${t.id}">
+    <div class="tags">${t.topic ? `<span class="tag">${esc(dentLabel(DENT_TOPICS, t.topic))}</span>` : ''}${t.src ? `<span class="tag s">${dentLabel(DENT_SRC, t.src)}</span>` : ''}${t.interview ? '<span class="tag i">🎤 للمقابلة</span>' : ''}</div>
+    <div class="pearl">${esc(t.title || excerpt(t.body, 80) || 'فائدة بدون عنوان')}</div>
+    ${t.apply ? `<div class="ap">🛠️ ${esc(t.apply)}</div>` : ''}
+    <div class="d">${here ? '' : '🦷 دفتر السنّ · '}${fmtDay(dentDay(t))}${course}${rev ? ' · ' + rev : ''}</div>
+    ${t.src === 'course' && UI.dent.view === 'course' && here ? (t.cert ? `<div class="cert">📎 ${esc(t.cert)}</div>` : '<div class="d" style="color:var(--sepia)">ما كتبت وين الشهادة</div>') : ''}</button>`;
+}
+
 function itemHTML(t) {
+  if (t.room === 'teeth' && t.kind === 'text') return dentItemHTML(t);
   const today = todayISO(), r = roomOf(t.room);
   if (isLocked(t, today)) {
     const left = daysBetween(today, t.lockUntil);
@@ -605,6 +698,7 @@ function itemHTML(t) {
 function roomHTML(id) {
   const r = roomOf(id), list = roomItems(DB.texts, id);
   const head = `<div class="top"><button class="icon-btn" data-act="back" aria-label="رجوع">→</button><span class="t">${r.icon} ${r.name}</span></div>`;
+  if (id === 'teeth') return head + teethHTML();
   if (id === 'novels') {
     return head + `<button class="newbtn" data-act="newNovel">+ رواية جديدة</button>` +
       (list.length ? list.map(n => novelCover(n, true)).join('') : `<div class="empty"><div class="big">📖</div>كل رواية بتبلّش بفكرة. اعمل رواية جديدة، وبعدين ضيف فصولها وشخصياتها.</div>`);
@@ -619,6 +713,39 @@ function roomHTML(id) {
   }[id];
   return head + `<button class="newbtn" data-act="newText" data-room="${id}">${btn}</button>` +
     (list.length ? list.map(itemHTML).join('') : `<div class="empty"><div class="big">${r.icon}</div>${emptyMsg}</div>`);
+}
+
+// دفتر السنّ: privacy reminder, today's review card (one note at a time), three tabs, search and filters.
+function teethHTML() {
+  const today = todayISO(), f = UI.dent, all = dentList(DB.texts), due = dueReviews(DB.texts, today);
+  const d = due[0], inter = all.filter(t => t.interview).length;
+  const dueCard = d ? `<div class="due"><div class="k">🔁 راجع اليوم · ${fmtN(1)} من ${fmtN(due.length)}</div>
+      <div class="q">«${esc(d.title || excerpt(d.body, 120))}»</div>
+      <div class="m">${[dentLabel(DENT_TOPICS, d.topic), dentLabel(DENT_SRC, d.src)].filter(Boolean).map(esc).join(' · ')}${d.topic || d.src ? ' · ' : ''}المراجعة ${['الأولى', 'التانية', 'التالتة'][d.rev || 0] || ''}</div>
+      <div class="row2"><button class="y" data-act="revDone" data-id="${d.id}">✓ تذكّرتها</button><button class="n" data-act="openText" data-id="${d.id}">افتحها</button></div></div>` : '';
+  const chip = (k, v, label) => `<button class="chip ${f[k] === v ? 'on' : ''}" data-act="dentF" data-k="${k}" data-v="${v}">${label}</button>`;
+  const tab = (v, label) => `<button class="${f.view === v ? 'on' : ''}" data-act="dentF" data-k="view" data-v="${v}">${label}</button>`;
+  return `<div class="banner">🔒 تذكير: لا أسماء مرضى ولا صور بتبيّن مين هو. احكي الحالة بدون ما حدا يعرف صاحبها.</div>
+    ${dueCard}
+    <div class="seg">${tab('all', 'الكل ' + fmtN(all.length))}${tab('interview', '🎤 للمقابلة ' + fmtN(inter))}${tab('course', '🎓 كورسات')}</div>
+    <input class="field" id="dq" type="search" placeholder="🔍 دوّر بدفتر السنّ..." value="${esc(f.q)}" autocomplete="off" style="margin-bottom:8px">
+    <div class="fchips">${chip('topic', '', 'كل المواضيع')}${DENT_TOPICS.map(([v, l]) => chip('topic', v, esc(l))).join('')}</div>
+    <div class="fchips">${chip('src', '', 'كل المصادر')}${DENT_SRC.map(([v, l]) => chip('src', v, l)).join('')}</div>
+    <button class="newbtn" data-act="newText" data-room="teeth">+ فائدة جديدة</button>
+    <div id="dentList">${dentListHTML()}</div>`;
+}
+function dentListHTML() {
+  const f = UI.dent, list = dentList(DB.texts, f), filtered = f.topic || f.src || f.q.trim();
+  let top = '';
+  if (f.view === 'interview') top = `<div class="banner" style="background:var(--blue-soft);color:var(--blue)">🎤 قصص بتحكيها بمقابلة شغل. اقرأها قبل المقابلة بيوم: الفائدة، شو صار، وشو تعلّمت.</div>`;
+  if (f.view === 'course') {
+    const h = courseHours(DB.texts, todayISO().slice(0, 4));
+    top = `<div class="total"><b class="num">${fmtN(h.total)}</b><span>ساعة CPD مجموعهم<br>من ${fmtN(h.count)} ${h.count === 1 ? 'كورس' : 'كورسات'} · هالسنة ${h.year ? nHours(h.year) : 'ولا ساعة'}</span></div>`;
+  }
+  const empty = filtered ? 'ما في إشي بهالفلتر.'
+    : { all: 'كل يوم بتتعلّم إشي: من مريض، من زميل، من فيديو. اكتبه بسطر، ورح يرجعلك لتراجعه بكرا، وبعد أسبوع، وبعد شهر.',
+      interview: 'علّم على أي فائدة «🎤 جاهزة للمقابلة» وبتطلع هون.', course: 'لما تكتب فائدة من «🎓 كورس»، حط ساعاتها ووين الشهادة، وبينجمعوا هون.' }[f.view];
+  return top + (list.length ? list.map(dentItemHTML).join('') : `<div class="empty"><div class="big">🦷</div>${empty}</div>`);
 }
 
 function novelCover(n, link) {
@@ -696,7 +823,8 @@ function renderEditor() {
   const novel = t.kind === 'chapter' ? DB.texts[t.novel] : null;
   const day = t.room === 'diary' ? (t.day || isoDay(t.created)) : isoDay(t.created);
   const label = novel ? `📖 ${esc(novel.title || 'رواية')}` : `${r.icon} ${r.name}`;
-  const ph = { diary: 'شو صار معك اليوم؟', khawater: 'اكتب اللي بقلبك...', tajalli: 'اكتب قبل ما تروح اللحظة...', letters: 'اكتب رسالتك...', ideas: 'الفكرة...', novels: 'ابدأ الفصل...' }[t.room] || '';
+  const ph = { diary: 'شو صار معك اليوم؟', khawater: 'اكتب اللي بقلبك...', tajalli: 'اكتب قبل ما تروح اللحظة...', letters: 'اكتب رسالتك...', ideas: 'الفكرة...', novels: 'ابدأ الفصل...', teeth: 'التفاصيل: شو صار، شو لاحظت، وليش بتفرق...' }[t.room] || '';
+  const dent = t.room === 'teeth' && t.kind === 'text';
   $('app').innerHTML = `<div class="shell ${UI.focus ? 'focus' : ''}">${sideHTML()}<main class="main">
     <div class="ed">
       <div class="ed-top">
@@ -714,10 +842,12 @@ function renderEditor() {
       <div class="ed-body" id="edBody"><div class="ed-page">
         <div id="remoteBar"></div>
         ${t.room === 'letters' ? `<div class="ed-to"><span>إلى:</span><input id="edTo" value="${esc(t.to || '')}" placeholder="مين؟ (شخص، انت، حدا راح...)"></div>` : ''}
-        <input class="ed-title" id="edTitle" value="${esc(t.title || '')}" placeholder="${t.room === 'diary' ? esc(fmtLong(day)) : t.kind === 'chapter' ? 'عنوان الفصل' : 'عنوان (اختياري)'}">
-        <div class="ed-meta"><span>${fmtDay(day, true)}</span> · <span id="edWords" class="num">${fmtN(wordCount(t.body))}</span> كلمة</div>
+        ${dent ? dentTopHTML(t) : ''}
+        <input class="ed-title" id="edTitle" value="${esc(t.title || '')}" placeholder="${dent ? 'الفائدة بسطر: شو بدك تتذكر؟' : t.room === 'diary' ? esc(fmtLong(day)) : t.kind === 'chapter' ? 'عنوان الفصل' : 'عنوان (اختياري)'}">
+        <div class="ed-meta"><span>${fmtDay(day, true)}</span> · <span id="edWords" class="num">${fmtN(wordCount(t.body))}</span> كلمة${dent ? ' · 🔒 بدون أسماء مرضى' : ''}</div>
         ${t.spark ? `<div class="ed-spark">«${esc(t.spark)}»</div>` : ''}
-        <textarea class="ed-text" id="edText" placeholder="${ph}">${esc(t.body || '')}</textarea>
+        <textarea class="ed-text ${dent ? 'short' : ''}" id="edText" placeholder="${ph}">${esc(t.body || '')}</textarea>
+        ${dent ? dentBottomHTML(t) : ''}
       </div></div>
     </div></main></div>`;
   // The bar goes under the title on the laptop (CSS order) and stays above the keyboard on the phone.
@@ -725,6 +855,24 @@ function renderEditor() {
   grow(ta);
   if (ed.isNew) setTimeout(() => (t.room === 'letters' && !t.to ? $('edTo') : ta).focus(), 60);
 }
+// The dental note's own fields: source and topic (one tap each) above the pearl; apply, CPD and interview below.
+function dentTopHTML(t) {
+  const chips = (k, list) => list.map(([v, l]) => `<button class="chip ${t[k] === v ? 'on' : ''}" data-act="dentSet" data-k="${k}" data-v="${v}">${esc(l)}</button>`).join('');
+  return `<div class="dent"><div class="dent-lbl">من وين تعلّمتها؟</div><div class="chips" id="dcSrc">${chips('src', DENT_SRC)}</div>
+    <div class="dent-lbl">الموضوع</div><div class="chips" id="dcTopic">${chips('topic', DENT_TOPICS)}</div></div>`;
+}
+const isLink = s => /^https?:\/\/\S+$/i.test((s || '').trim());
+function dentBottomHTML(t) {
+  return `<div class="dent">
+    <div class="dent-line"><span>🛠️ كيف رح طبّقها؟</span><input id="edApply" value="${esc(t.apply || '')}" placeholder="سطر واحد"></div>
+    <div class="dent-two" id="courseBox" ${t.src === 'course' ? '' : 'hidden'}>
+      <div class="dent-line"><span>🎓 ساعات CPD</span><input id="edHours" inputmode="decimal" value="${t.hours ? esc(t.hours) : ''}" placeholder="مثلاً 3"></div>
+      <div class="dent-line"><span>📎 الشهادة وين؟</span><input id="edCert" value="${esc(t.cert || '')}" placeholder="رابط أو مكانها">${isLink(t.cert) ? `<a href="${esc(t.cert.trim())}" target="_blank" rel="noopener">افتح ↗</a>` : ''}</div>
+    </div>
+    <button class="dent-flag" data-act="dentFlag"><span>🎤 جاهزة للمقابلة (بحكيها بمقابلة شغل)</span><span class="sw ${t.interview ? 'on' : ''}" id="dentSw"></span></button>
+  </div>`;
+}
+
 // The text box grows with the text, so the page scrolls (not the box). The height is measured on a hidden copy:
 // shrinking the real box to measure it would make the page jump up while he writes or adds a haraka.
 let mirror = null;
@@ -746,6 +894,9 @@ function edInput() {
   const ed = UI.ed; if (!ed) return;
   ed.t.title = $('edTitle').value; ed.t.body = $('edText').value;
   if ($('edTo')) ed.t.to = $('edTo').value;
+  if ($('edApply')) ed.t.apply = $('edApply').value;
+  if ($('edHours')) ed.t.hours = parseHours($('edHours').value);
+  if ($('edCert')) ed.t.cert = $('edCert').value;
   ed.dirty = true;
   $('edWords').textContent = fmtN(wordCount(ed.t.body));
   $('savedState').textContent = '';
@@ -777,7 +928,7 @@ function leaveEditor() { UI.ed = null; }
 
 // Puts a mark (or punctuation) at the cursor. Uses the browser's own typing so Undo (Ctrl+Z) still works.
 function putMark(mark, plain) {
-  const ta = document.activeElement && /^(edText|edTitle|edTo)$/.test(document.activeElement.id) ? document.activeElement : (UI.lastField && $(UI.lastField)) || $('edText');
+  const ta = document.activeElement && /^(edText|edTitle|edTo|edApply)$/.test(document.activeElement.id) ? document.activeElement : (UI.lastField && $(UI.lastField)) || $('edText');
   if (!ta) return;
   if (document.activeElement !== ta) ta.focus({ preventScroll: true });
   const s = ta.selectionStart, e = ta.selectionEnd, before = ta.value.slice(0, s);
@@ -803,6 +954,7 @@ function remoteChanged(data) {
 function takeRemote(data) {
   const ed = UI.ed; data = data || ed.remote; if (!data) return;
   ed.t = { ...data }; ed.remote = null; ed.dirty = false; ed.savedWords = data.words || 0;
+  if (data.room === 'teeth') { renderEditor(); return; }
   $('edTitle').value = data.title || ''; $('edText').value = data.body || ''; if ($('edTo')) $('edTo').value = data.to || '';
   $('edWords').textContent = fmtN(wordCount(data.body)); $('remoteBar').innerHTML = ''; grow($('edText'));
 }
@@ -834,7 +986,38 @@ A.newText = b => {
     const today = todayISO(), hit = roomItems(DB.texts, 'diary').find(t => (t.day || isoDay(t.created)) === today);
     return hit ? openEditor(hit) : openEditor(blank('diary', { day: today }), true);
   }
+  if (room === 'teeth') {
+    // Start with the source/topic chosen in the room's filters, so a filtered list gets notes of its own kind.
+    const f = UI.dent, extra = { ...reviewStart(todayISO()) };
+    if (f.src) extra.src = f.src; else if (f.view === 'course') extra.src = 'course';
+    if (f.topic) extra.topic = f.topic;
+    if (f.view === 'interview') extra.interview = true;
+    return openEditor(blank('teeth', extra), true);
+  }
   openEditor(blank(room), true);
+};
+// One tap on a source or topic chip in the editor (tap again to clear it).
+A.dentSet = b => {
+  const ed = UI.ed, k = b.dataset.k, v = ed.t[k] === b.dataset.v ? '' : b.dataset.v;
+  ed.t[k] = v;
+  b.parentElement.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.v === v));
+  if (k === 'src') $('courseBox').hidden = v !== 'course';
+  ed.dirty = true; $('savedState').textContent = ''; clearTimeout(ed.timer); ed.timer = setTimeout(flushEditor, 700);
+};
+A.dentFlag = () => {
+  const ed = UI.ed; ed.t.interview = !ed.t.interview;
+  $('dentSw').classList.toggle('on', ed.t.interview);
+  ed.dirty = true; flushEditor();
+  toast(ed.t.interview ? '🎤 صارت بقائمة المقابلة' : 'شلتها من قائمة المقابلة');
+};
+A.dentF = b => { UI.dent[b.dataset.k] = b.dataset.v; render(); };
+// "I remembered it": the note moves on to its next review (7 days, then 30, then done).
+A.revDone = b => {
+  const t = DB.texts[b.dataset.id]; if (!alive(t)) return;
+  const r = reviewDone(t, todayISO());
+  store.putText({ ...t, ...r, updated: Date.now(), dev: DEV });
+  toast(r.revNext ? 'برافو ✓ بترجعلك بعد ' + nDays(daysBetween(todayISO(), r.revNext)) : 'برافو ✓ خلصت مراجعاتها');
+  render();
 };
 A.writeSpark = () => openEditor(blank('khawater', { spark: sparkFor(todayISO()) }), true);
 A.openText = b => {
@@ -869,6 +1052,7 @@ A.moveTo = b => {
   } else {
     t.room = b.dataset.room;
     if (t.room === 'diary' && !t.day) t.day = isoDay(t.created);
+    if (t.room === 'teeth' && t.rev === undefined) Object.assign(t, reviewStart(todayISO()));
   }
   UI.ed.dirty = true; flushEditor(); closeSheet();
   toast('انتقل ✓'); renderEditor();
@@ -1057,17 +1241,18 @@ document.addEventListener('click', e => {
 document.addEventListener('mousedown', e => { if (e.target.closest('[data-mark]')) e.preventDefault(); });
 document.addEventListener('input', e => {
   const id = e.target.id;
-  if (id === 'edText' || id === 'edTitle' || id === 'edTo') edInput();
+  if (/^(edText|edTitle|edTo|edApply|edHours|edCert)$/.test(id)) edInput();
   else if (id === 'q') { UI.q = e.target.value; $('res').innerHTML = resultsHTML(); }
+  else if (id === 'dq') { UI.dent.q = e.target.value; $('dentList').innerHTML = dentListHTML(); }
   else if (id === 'nm') { clearTimeout(UI.nmT); UI.nmT = setTimeout(() => store.putMeta({ settings: { name: e.target.value.trim() } }), 600); }
   else if (id === 'novelNotes') {
     clearTimeout(UI.notesT);
     UI.notesT = setTimeout(() => { const n = DB.texts[e.target.dataset.id]; if (n) store.putText({ ...n, notes: e.target.value, updated: Date.now(), dev: DEV }); }, 700);
   }
 });
-document.addEventListener('focusin', e => { if (/^(edText|edTitle|edTo)$/.test(e.target.id)) UI.lastField = e.target.id; });
+document.addEventListener('focusin', e => { if (/^(edText|edTitle|edTo|edApply)$/.test(e.target.id)) UI.lastField = e.target.id; });
 document.addEventListener('keydown', e => {
-  if (!e.altKey || !/^(edText|edTitle|edTo)$/.test(e.target.id)) return;
+  if (!e.altKey || !/^(edText|edTitle|edTo|edApply)$/.test(e.target.id)) return;
   const k = (e.code || '').match(/^(Digit|Numpad)([1-8])$/); if (!k) return;
   e.preventDefault(); putMark(MARKS[+k[2] - 1][0]);
 });
