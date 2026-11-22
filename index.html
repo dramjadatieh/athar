@@ -253,6 +253,30 @@ textarea.notes{width:100%;min-height:50vh;border:1px solid var(--line);border-ra
 .sw::after{content:'';position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:right .15s}
 .sw.on{background:var(--sepia)} .sw.on::after{right:21px}
 .ed-text.short{min-height:22vh}
+.pics{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.pic{border-radius:12px;overflow:hidden;background:var(--card);border:1px solid var(--line);padding:0;text-align:start}
+.pic img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:var(--paper2)}
+.pic small{display:block;font-size:11px;padding:4px 6px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:22px}
+.pic-add{border:1.5px dashed var(--blue);border-radius:12px;aspect-ratio:1;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:6px}
+.pic-add button{background:var(--blue-soft);color:var(--blue);border-radius:9px;padding:6px 4px;font-size:12px;font-weight:600}
+.pic-warn{background:var(--sepia-soft);color:var(--sepia-ink);border-radius:10px;padding:6px 10px;font-size:12px;line-height:1.7;margin-top:8px}
+.thumbs{display:flex;gap:6px;margin-top:7px}
+.thumbs img,.thumbs span{width:46px;height:46px;border-radius:9px;object-fit:cover;flex:none}
+.thumbs span{background:var(--paper2);display:grid;place-items:center;font-size:12px;color:var(--ink2);font-weight:600}
+#viewer{position:fixed;inset:0;z-index:45;background:#111;color:#fff;display:none;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+#viewer.on{display:flex}
+#viewer .vt{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-size:14px}
+#viewer .vt button{color:#fff;padding:6px 10px;font-weight:600}
+#viewer .vimg{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;touch-action:pan-y}
+#viewer .vimg img{max-width:100%;max-height:100%;object-fit:contain}
+#viewer .nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:22px}
+#viewer .nav.r{right:8px} #viewer .nav.l{left:8px}
+#viewer .vc{padding:12px 16px 16px;background:#181818}
+#viewer .vc b{font-size:16px;display:block;min-height:22px}
+#viewer .vc .muted{color:#aaa}
+#viewer .vb{display:flex;gap:8px;margin-top:10px}
+#viewer .vb button{flex:1;border-radius:10px;padding:9px;font-weight:600;font-size:14px;background:#2a2a2a;color:#fff}
+#viewer .vb .del{color:#F09A88}
 
 #auth{position:fixed;inset:0;z-index:70;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .auth-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px 20px 18px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px;text-align:center}
@@ -274,10 +298,10 @@ textarea.notes{width:100%;min-height:50vh;border:1px solid var(--line);border-ra
 <div id="auth" dir="rtl" lang="ar" hidden></div>
 <script type="module">import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, onSnapshot, collection, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, getDoc, onSnapshot, collection, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig } from './config.js';
 
-const VERSION = "6";
+const VERSION = "7";
 /* ---------- logic ---------- */
 // The six rooms of the app. A novel is a "novel" item in the novels room; its chapters are "chapter" items.
 const ROOMS = [
@@ -324,7 +348,7 @@ function dentList(texts, f = {}) {
   return Object.values(texts).filter(t => isDent(t)
     && (f.view !== 'interview' || t.interview) && (f.view !== 'course' || t.src === 'course')
     && (!f.topic || t.topic === f.topic) && (!f.src || t.src === f.src)
-    && (!q || normAr([t.title, t.body, t.apply, t.cert, dentLabel(DENT_TOPICS, t.topic)].join(' ')).includes(q)))
+    && (!q || normAr([t.title, t.body, t.apply, t.cert, dentLabel(DENT_TOPICS, t.topic), ...(t.pics || []).map(p => p.cap)].join(' ')).includes(q)))
     .sort((a, b) => dentDay(b).localeCompare(dentDay(a)) || b.created - a.created);
 }
 
@@ -415,7 +439,12 @@ function roomItems(texts, room) {
   return list.sort((a, b) => b.updated - a.updated);
 }
 const excerpt = (s, n = 120) => { const x = (s || '').replace(/\s+/g, ' ').trim(); return x.length > n ? x.slice(0, n) + '…' : x; };
-const hasContent = t => !!((t.title || '').trim() || (t.body || '').trim() || (t.to || '').trim() || (t.apply || '').trim());
+const hasContent = t => !!((t.title || '').trim() || (t.body || '').trim() || (t.to || '').trim() || (t.apply || '').trim() || (t.pics || []).length);
+// Photos in a dental note: t.pics = [{id, cap, th}] (th = a small preview kept in the note itself); the full photo is its
+// own document (store.putPic / getPic), loaded only when opened. Photos are made smaller before saving (like WhatsApp).
+const PIC_MAX = 1280, THUMB = 200, PICS_PER_NOTE = 20;
+// The size a photo is drawn at so its longest side is at most max (never made bigger).
+const fitSize = (w, h, max) => { const k = Math.min(1, max / Math.max(w, h)); return { w: Math.max(1, Math.round(w * k)), h: Math.max(1, Math.round(h * k)) }; };
 
 /* ---------- storage (Firebase) ---------- */
 
@@ -426,6 +455,7 @@ const hasContent = t => !!((t.title || '').trim() || (t.body || '').trim() || (t
 // Same Firebase project and sign-in as Jaybti and Nafas. Athar keeps:
 //   users/<uid>/apps/athar              settings + words written per day (small)
 //   users/<uid>/apps/athar/texts/<id>   one document per text, novel or chapter (so a long novel never fills one document)
+//   users/<uid>/apps/athar/pics/<id>    one full-size photo of a dental note (made smaller first), read only when opened
 // Every write goes to this device's own copy at once (works with no internet) and reaches the server when online.
 // Only the text that was edited is written, so an old copy on another device never writes over newer texts.
 const fbApp = initializeApp(firebaseConfig);
@@ -437,6 +467,8 @@ const plain = o => JSON.parse(JSON.stringify(o));
 const deepMerge = (a, b) => { for (const k in b) { if (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])) { a[k] = a[k] && typeof a[k] === 'object' ? a[k] : {}; deepMerge(a[k], b[k]); } else a[k] = b[k]; } return a; };
 const metaDoc = () => doc(fsdb, 'users', refs.uid, 'apps', 'athar');
 const textDoc = id => doc(fsdb, 'users', refs.uid, 'apps', 'athar', 'texts', id);
+const picDoc = id => doc(fsdb, 'users', refs.uid, 'apps', 'athar', 'pics', id);
+const picCache = new Map();
 const sync = { pending: 0, at: null, failed: false };
 function sent(p) {
   sync.pending++;
@@ -453,6 +485,14 @@ const store = {
     DB.meta.days = DB.meta.days || {}; DB.meta.days[day] = (DB.meta.days[day] || 0) + n;
     sent(setDoc(metaDoc(), { days: { [day]: increment(n) } }, { merge: true }));
   },
+  putPic(id, data, text) { if (!refs.uid) return; picCache.set(id, data); sent(setDoc(picDoc(id), { data, text, created: Date.now() })); },
+  // From memory, else this device's copy, else the server.
+  getPic(id) {
+    if (!refs.uid) return Promise.resolve(null);
+    if (picCache.has(id)) return Promise.resolve(picCache.get(id));
+    return getDoc(picDoc(id)).then(s => { const d = s.exists() ? s.data().data : null; if (d) picCache.set(id, d); return d; }, () => null);
+  },
+  dropPic(id) { if (!refs.uid) return; picCache.delete(id); sent(deleteDoc(picDoc(id))); },
 };
 window.syncText = () => !navigator.onLine ? 'ما في نت هلأ: كل إشي محفوظ على هالجهاز، وبيتزامن لما يرجع النت.'
   : sync.failed ? 'آخر حفظ ما وصل السيرفر.' : sync.pending ? 'عم يتزامن...' : 'كل إشي متزامن ✓';
@@ -577,6 +617,7 @@ function go(view, replace) {
 A.back = () => { if (history.state && history.length > 1 && !UI.firstPage()) history.back(); else go({ name: 'home' }, true); };
 UI.firstPage = () => !history.state || history.state.first;
 window.addEventListener('popstate', e => {
+  if ($('viewer').classList.contains('on')) { closeViewer(); try { history.pushState({ v: UI.view }, ''); } catch (err) {} return; }
   if ($('sheet').classList.contains('on')) { closeSheet(); try { history.pushState({ v: UI.view }, ''); } catch (err) {} return; }
   flushEditor();
   if (UI.view.name === 'edit') leaveEditor();
@@ -666,12 +707,14 @@ function dentItemHTML(t) {
   const today = todayISO(), here = UI.view.name === 'room';
   const rev = t.revNext ? (t.revNext <= today ? '🔁 للمراجعة اليوم' : 'المراجعة الجاية بعد ' + nDays(daysBetween(today, t.revNext)))
     : (t.rev >= REVIEW_GAPS.length ? 'خلصت مراجعاتها ✓' : '');
+  const pics = t.pics || [];
   const course = t.src === 'course' ? (t.hours ? ' · ' + nHours(t.hours) : '') : '';
   return `<button class="item" data-act="openText" data-id="${t.id}">
     <div class="tags">${t.topic ? `<span class="tag">${esc(dentLabel(DENT_TOPICS, t.topic))}</span>` : ''}${t.src ? `<span class="tag s">${dentLabel(DENT_SRC, t.src)}</span>` : ''}${t.interview ? '<span class="tag i">🎤 للمقابلة</span>' : ''}</div>
     <div class="pearl">${esc(t.title || excerpt(t.body, 80) || 'فائدة بدون عنوان')}</div>
     ${t.apply ? `<div class="ap">🛠️ ${esc(t.apply)}</div>` : ''}
-    <div class="d">${here ? '' : '🦷 دفتر السنّ · '}${fmtDay(dentDay(t))}${course}${rev ? ' · ' + rev : ''}</div>
+    ${pics.length ? `<div class="thumbs">${pics.slice(0, pics.length > 4 ? 3 : 4).map(p => `<img src="${p.th}" alt="">`).join('')}${pics.length > 4 ? `<span>+${fmtN(pics.length - 3)}</span>` : ''}</div>` : ''}
+    <div class="d">${here ? '' : '🦷 دفتر السنّ · '}${fmtDay(dentDay(t))}${pics.length ? ' · 📷 ' + fmtN(pics.length) : ''}${course}${rev ? ' · ' + rev : ''}</div>
     ${t.src === 'course' && UI.dent.view === 'course' && here ? (t.cert ? `<div class="cert">📎 ${esc(t.cert)}</div>` : '<div class="d" style="color:var(--sepia)">ما كتبت وين الشهادة</div>') : ''}</button>`;
 }
 
@@ -861,9 +904,17 @@ function dentTopHTML(t) {
   return `<div class="dent"><div class="dent-lbl">من وين تعلّمتها؟</div><div class="chips" id="dcSrc">${chips('src', DENT_SRC)}</div>
     <div class="dent-lbl">الموضوع</div><div class="chips" id="dcTopic">${chips('topic', DENT_TOPICS)}</div></div>`;
 }
+function picGridHTML(t) {
+  const pics = t.pics || [];
+  return pics.map((p, i) => `<button class="pic" data-act="picOpen" data-i="${i}"><img src="${p.th}" alt=""><small>${esc(p.cap || '')}</small></button>`).join('')
+    + (pics.length < PICS_PER_NOTE ? `<div class="pic-add"><button data-act="picAdd" data-cam="1">📷 كاميرا</button><button data-act="picAdd">🖼️ معرض</button></div>` : '');
+}
 const isLink = s => /^https?:\/\/\S+$/i.test((s || '').trim());
 function dentBottomHTML(t) {
   return `<div class="dent">
+    <div class="dent-lbl">📷 الصور <span id="picN">${t.pics && t.pics.length ? '(' + fmtN(t.pics.length) + ')' : ''}</span></div>
+    <div class="pics" id="picGrid">${picGridHTML(t)}</div>
+    <div class="pic-warn">🔒 صوّر الأدوات والأسنان بس: لا وجوه، ولا أسماء، ولا أشعة عليها اسم المريض.</div>
     <div class="dent-line"><span>🛠️ كيف رح طبّقها؟</span><input id="edApply" value="${esc(t.apply || '')}" placeholder="سطر واحد"></div>
     <div class="dent-two" id="courseBox" ${t.src === 'course' ? '' : 'hidden'}>
       <div class="dent-line"><span>🎓 ساعات CPD</span><input id="edHours" inputmode="decimal" value="${t.hours ? esc(t.hours) : ''}" placeholder="مثلاً 3"></div>
@@ -924,7 +975,7 @@ function flushEditor() {
   store.putText({ ...ed.t });
   const s = $('savedState'); if (s) s.textContent = 'محفوظ ✓';
 }
-function leaveEditor() { UI.ed = null; }
+function leaveEditor() { UI.ed = null; closeViewer(); }
 
 // Puts a mark (or punctuation) at the cursor. Uses the browser's own typing so Undo (Ctrl+Z) still works.
 function putMark(mark, plain) {
@@ -1010,6 +1061,94 @@ A.dentFlag = () => {
   ed.dirty = true; flushEditor();
   toast(ed.t.interview ? '🎤 صارت بقائمة المقابلة' : 'شلتها من قائمة المقابلة');
 };
+/* ----- photos in a dental note ----- */
+A.picAdd = b => { const inp = $(b.dataset.cam ? 'camIn' : 'picIn'); inp.value = ''; inp.click(); };
+// Draws the photo smaller: full (longest side PIC_MAX, under ~700 KB) and a square preview for the lists.
+async function shrinkPic(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = bad; i.src = url; });
+    const draw = (w, h, sx, sy, sw, sh) => { const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img, sx, sy, sw, sh, 0, 0, w, h); return c; };
+    const W = img.naturalWidth, H = img.naturalHeight;
+    let max = PIC_MAX, q = 0.78, data = '';
+    for (let k = 0; k < 4; k++) { const f = fitSize(W, H, max); data = draw(f.w, f.h, 0, 0, W, H).toDataURL('image/jpeg', q); if (data.length < 700000) break; max = Math.round(max * 0.8); q -= 0.08; }
+    const side = Math.min(W, H), th = draw(THUMB, THUMB, (W - side) / 2, (H - side) / 2, side, side).toDataURL('image/jpeg', 0.6);
+    return { data, th };
+  } finally { URL.revokeObjectURL(url); }
+}
+async function picsChosen(files) {
+  const ed = UI.ed; if (!ed || !files.length) return;
+  const room = PICS_PER_NOTE - (ed.t.pics || []).length;
+  if (room <= 0) { toast('بكفّي ' + fmtN(PICS_PER_NOTE) + ' صورة بالفائدة الوحدة'); return; }
+  toast('عم جهّز الصورة...');
+  const added = [];
+  for (const f of [...files].slice(0, room)) {
+    try { const { data, th } = await shrinkPic(f), id = newId(); store.putPic(id, data, ed.t.id); added.push({ id, cap: '', th }); }
+    catch (e) { toast('ما قدرت أفتح هالصورة'); }
+  }
+  if (!added.length || UI.ed !== ed) return;
+  ed.t.pics = [...(ed.t.pics || []), ...added];
+  ed.dirty = true; flushEditor(); drawPics();
+  toast(added.length === 1 ? '📷 انضافت الصورة' : '📷 انضافوا ' + fmtN(added.length) + ' صور');
+  if (added.length === 1) A.picCap({ dataset: { i: String(ed.t.pics.length - 1) } });
+}
+['picIn', 'camIn'].forEach(id => $(id).addEventListener('change', e => picsChosen(e.target.files)));
+function drawPics() {
+  const t = UI.ed && UI.ed.t; if (!t || !$('picGrid')) return;
+  $('picGrid').innerHTML = picGridHTML(t);
+  $('picN').textContent = t.pics && t.pics.length ? '(' + fmtN(t.pics.length) + ')' : '';
+}
+// The photo's short name (the bur, the stone...), asked right after adding it and from the viewer.
+A.picCap = b => {
+  const p = UI.ed.t.pics[+b.dataset.i]; if (!p) return;
+  openSheet(`<h3>📷 شو اسم هالصورة؟</h3><div class="s">اختياري. مثلاً اسم الـ bur أو الـ stone.</div>
+    <img src="${p.th}" alt="" style="width:96px;height:96px;border-radius:12px;object-fit:cover;margin-bottom:8px">
+    <input type="text" id="picCapIn" value="${esc(p.cap || '')}" placeholder="مثلاً Chamfer bur 856" dir="auto">
+    <div class="srow"><button class="go blue" data-act="picCapSave" data-i="${b.dataset.i}">احفظ</button></div>`);
+  setTimeout(() => $('picCapIn') && $('picCapIn').focus(), 80);
+};
+A.picCapSave = b => {
+  const ed = UI.ed, i = +b.dataset.i; if (!ed.t.pics[i]) return;
+  ed.t.pics = ed.t.pics.map((p, k) => k === i ? { ...p, cap: $('picCapIn').value.trim() } : p);
+  ed.dirty = true; flushEditor(); closeSheet(); drawPics();
+  if ($('viewer').classList.contains('on')) showPic(i);
+};
+// Full-screen photo: name, previous/next (also by swiping), rename, delete.
+function closeViewer() { const v = $('viewer'); if (v) { v.classList.remove('on'); v.innerHTML = ''; } UI.picI = null; }
+A.picClose = closeViewer;
+function showPic(i) {
+  const pics = (UI.ed && UI.ed.t.pics) || [], p = pics[i]; if (!p) { closeViewer(); return; }
+  UI.picI = i;
+  const v = $('viewer');
+  v.innerHTML = `<div class="vt"><button data-act="picClose">✕ سكّر</button><span class="num">${fmtN(i + 1)} من ${fmtN(pics.length)}</span></div>
+    <div class="vimg" id="vimg"><img id="vpic" src="${p.th}" alt="">
+      ${i > 0 ? '<button class="nav r" data-act="picStep" data-d="-1" aria-label="اللي قبل">›</button>' : ''}
+      ${i < pics.length - 1 ? '<button class="nav l" data-act="picStep" data-d="1" aria-label="اللي بعد">‹</button>' : ''}</div>
+    <div class="vc"><b>${esc(p.cap || '')}</b>${p.cap ? '' : '<span class="muted">بدون اسم</span>'}
+      <div class="vb"><button data-act="picCap" data-i="${i}">✏️ غيّر الاسم</button><button class="del" data-act="picDel" data-i="${i}">🗑️ احذف الصورة</button></div></div>`;
+  v.classList.add('on');
+  store.getPic(p.id).then(d => { if (UI.picI === i && $('vpic')) { if (d) $('vpic').src = d; else toast('الصورة الكبيرة لسا ما وصلت. بتبيّن لما يرجع النت'); } });
+}
+A.picOpen = b => showPic(+b.dataset.i);
+A.picStep = b => showPic(UI.picI + Number(b.dataset.d));
+A.picDel = b => {
+  if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'اكبس كمان مرة'; return; }
+  const ed = UI.ed, i = +b.dataset.i, p = ed.t.pics[i]; if (!p) return;
+  ed.t.pics = ed.t.pics.filter((x, k) => k !== i);
+  ed.dirty = true; flushEditor(); store.dropPic(p.id); drawPics();
+  toast('انحذفت الصورة');
+  if (ed.t.pics.length) showPic(Math.min(i, ed.t.pics.length - 1)); else closeViewer();
+};
+// Swipe left/right in the viewer.
+let swipeX = null;
+document.addEventListener('touchstart', e => { swipeX = e.target.closest && e.target.closest('#vimg') ? e.touches[0].clientX : null; }, { passive: true });
+document.addEventListener('touchend', e => {
+  if (swipeX === null || UI.picI == null) return;
+  const dx = e.changedTouches[0].clientX - swipeX; swipeX = null;
+  if (Math.abs(dx) < 50) return;
+  const j = UI.picI + (dx > 0 ? 1 : -1);   // right-to-left app: swiping right shows the next photo
+  if (UI.ed && UI.ed.t.pics[j]) showPic(j);
+});
 A.dentF = b => { UI.dent[b.dataset.k] = b.dataset.v; render(); };
 // "I remembered it": the note moves on to its next review (7 days, then 30, then done).
 A.revDone = b => {
@@ -1227,6 +1366,7 @@ A.forever = b => {
   if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'متأكد؟ ما برجع'; return; }
   const t = DB.texts[b.dataset.id];
   if (t.kind === 'novel') Object.values(DB.texts).filter(c => c.kind === 'chapter' && c.novel === t.id).forEach(c => store.dropText(c.id));
+  (t.pics || []).forEach(p => store.dropPic(p.id));
   store.dropText(t.id); A.trash(); render();
 };
 
