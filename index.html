@@ -294,6 +294,9 @@ textarea.notes{width:100%;min-height:50vh;border:1px solid var(--line);border-ra
 <body>
 <div id="app"></div>
 <div id="sheet"></div>
+<div id="viewer"></div>
+<input type="file" id="picIn" accept="image/*" multiple hidden>
+<input type="file" id="camIn" accept="image/*" capture="environment" hidden>
 <div id="toast"></div>
 <div id="auth" dir="rtl" lang="ar" hidden></div>
 <script type="module">import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
@@ -301,7 +304,7 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordRe
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, setDoc, deleteDoc, getDoc, onSnapshot, collection, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { firebaseConfig } from './config.js';
 
-const VERSION = "7";
+const VERSION = "8";
 /* ---------- logic ---------- */
 // The six rooms of the app. A novel is a "novel" item in the novels room; its chapters are "chapter" items.
 const ROOMS = [
